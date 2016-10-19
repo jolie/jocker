@@ -1,2 +1,2 @@
-# jocker
-The Jolie Docker Orchestrator
+# Jocker
+The Jolie Docker Orchestrator (work to commence soon).
