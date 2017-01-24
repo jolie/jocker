@@ -22,9 +22,12 @@ outputPort DockerD {
     .osc.inspect.method.queryFormat = "json";
     .osc.listRunProcesses.alias = "containers/%!{id}/top";
     .osc.listRunProcesses.method = "get";
-    .osc.listRunProcesses.method.queryFormat = "json"
+    .osc.listRunProcesses.method.queryFormat = "json";
+    .osc.logs.alias = "containers/%!{id}/logs";
+    .osc.logs.method = "get";
+    .osc.logs.method.queryFormat = "json"
   }
-  RequestResponse: containers, inspect, listRunProcesses
+  RequestResponse: containers, inspect, listRunProcesses, logs
 }
 
 main {
@@ -41,12 +44,36 @@ main {
     println@Console(s)()
   }]
   [listRunProcesses(request)(response){
-    if(request.ps_args==""){
+    if(!is_defined(request.ps_args)){
       request.ps_args="-ef"
     };
     listRunProcesses@DockerD(request)(responseByDocker);
     response.Titles<<responseByDocker.Titles;
     response.Processes.row<<responseByDocker.Processes._;
+    valueToPrettyString@StringUtils( response )( s );
+    println@Console(s)()
+  }]
+  [logs(request)(response){
+    if(!is_defined(request.follow)){
+      request.follow = false
+    };
+    if(!is_defined(request.stderr)){
+      request.stderr = false
+    };
+    if(!is_defined(request.stdout)){
+      request.stdout = false
+    };
+    if(!is_defined(request.since)){
+      request.since = 0
+    };
+    if(!is_defined(request.timestamps)){
+      request.timestamps = false
+    };
+    if(!is_defined(request.tail)){
+      request.tail = "all"
+    };
+    logs@DockerD(request)(responseByDocker);
+    response.log<<responseByDocker;
     valueToPrettyString@StringUtils( response )( s );
     println@Console(s)()
   }]

@@ -12,6 +12,15 @@ type ListRunProcessesRequest: void {
 	.id: string			//< ID or name of the container
 	.ps_args?: string	// The arguments to pass to ps
 }
+type LogsRequest: void {
+  	.id: string			//< ID or name of the container
+  	.follow?: bool  	// return stream
+  	.stdout?: bool		// show stdout log
+  	.stderr?: bool		// show stderr log
+  	.since?:	int		// Specifying a timestamp will only output log-entries since that timestamp
+  	.timestamps?: bool	// print timestamps for every log line
+  	.tail?: string		// Only return this number of log lines from the end of the logs. Specify as an integer or all to output all log lines
+}
 type BridgeType: void{
 	.Aliases?: undefined
 	.Links?: undefined
@@ -223,10 +232,15 @@ type ListRunProcessesResponse: void {
 	.Titles[0, *]: string
 	.Processes[0, *]: Processes
 }
+// data-type of an LogsResponse
+type LogsResponse: void {
+	.log: undefined
+}
 
 interface InterfaceAPI {
   RequestResponse:
   	containers( ContainersRequest )( ContainersResponse ),
     inspect( InspectRequest )( InspectResponse ),
-    listRunProcesses( ListRunProcessesRequest )( ListRunProcessesResponse )
+    listRunProcesses( ListRunProcessesRequest )( ListRunProcessesResponse ),
+    logs( LogsRequest )( LogsResponse )
 }
