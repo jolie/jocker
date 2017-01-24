@@ -62,25 +62,29 @@ type ContainersResponse: void{
 	.container[0, *]: ContainerType 
 }
 type Config: void {
+	.Entrypoint: undefined
 	.AttachStderr: bool
 	.AttachStdin: bool
 	.AttachStdout: bool
+	.ArgsEscaped: bool
 	.Cmd[0, *]: string
 	.Domainname: string
-	.Env[1, *]: string
+	.Env[0, *]: string
 	.Hostname: string
 	.Image: string
 	.Labels: undefined
-	.MacAddress: string
-	.NetworkDisabled: bool
+	.MacAddress?: string
+	.NetworkDisabled?: bool
 	.OpenStdin: bool
-	.StdinOne: bool
+	.StdinOnce: bool
 	.Tty: bool
 	.User: string
 	.Volumes: undefined
+	.OnBuild: undefined
 	.WorkingDir: string
-	.StopSignal: string
-	.StopTimeout: int
+	.StopSignal?: string
+	.StopTimeout?: int
+	.ExposedPorts: undefined
 }
 type HostConfig: void {
 	.MaximumIOps?: int
@@ -91,41 +95,68 @@ type HostConfig: void {
 	.BlkioDeviceWriteBps[0, *]: undefined
 	.BlkioDeviceReadIOps[0, *]: undefined
 	.BlkioDeviceWriteIOps[0, *]: undefined
+	.Binds?: undefined
 	.ContainerIDFile?: string
 	.CpusetCpus?: string
 	.CpusetMems?: string
 	.CpuPercent?: int
 	.CpuShares?: int
 	.CpuPeriod?: int
+	.CpuQuota?: int
+	.CpuCount?: int
 	.CpuRealtimePeriod?: int
 	.CpuRealtimeRuntime?: int
-	.Cevices[0, *]: undefined
+	.CapAdd?: undefined
+	.CapDrop?: undefined
+	.CgroupParent?: string
+	.GroupAdd?: undefined
+	.Devices[0, *]: undefined
+	.DiskQuota?: int
+	.DnsOptions[0, *]: undefined
+	.Dns[0, *]: undefined
+	.DnsSearch?: undefined
+	.VolumesFrom?: undefined
 	.IpcMode?: string
+	.Isolation?: string
 	.LxcConf[0, *]: undefined
 	.Memory?: int
+	.MemorySwappiness?: int
 	.MemorySwap?: int
 	.MemoryReservation?: int
 	.KernelMemory?: int
 	.OomKillDisable?: bool
 	.OomScoreAdj?: int
 	.NetworkMode: string
+	.NanoCpus?: int
 	.PidMode?: string
 	.PortBindings?: undefined
 	.Privileged?: bool
+	.PidsLimit?: int
 	.ReadonlyRootfs?: bool
+	.Runtime?: string
 	.PublishAllPorts?: bool
 	.RestartPolicy?: undefined
-	.LogConfig?: undefined
+	.LogConfig[0, *]: undefined
 	.Sysctls?: undefined
 	.Ulimits[0, *]: undefined
 	.VolumeDriver?: string
 	.ShmSize?: int
+	.UsernsMode?: string
+	.ExtraHosts?: undefined
+	.UTSMode?: string
+	.Cgroup?: string
+	.IOMaximumIOps?: int
+	.IOMaximumBandwidth?: int
+	.AutoRemove?: bool
+	.ConsoleSize[0, *]: int
+	.Links?: undefined
+	.SecurityOpt?: undefined
 }
 type State: void {
 	.Error: string
 	.ExitCode: int
 	.FinishedAt: string
-	.OomKilled: bool
+	.OOMKilled: bool
 	.Dead: bool
 	.Paused: bool
 	.Pid: int
@@ -133,6 +164,26 @@ type State: void {
 	.Running: bool
 	.StartedAt: string
 	.Status: string
+}
+type NetworkSettings: void {
+	.Bridge: string
+	.SandboxID: string
+	.HairpinMode: bool
+	.LinkLocalIPv6Address: string
+	.LinkLocalIPv6PrefixLen: int
+	.SandboxKey: string
+	.SecondaryIPAddresses: undefined
+	.SecondaryIPv6Addresses: undefined
+	.EndpointID: string
+	.Gateway: string
+	.GlobalIPv6Address?: string
+	.GlobalIPv6PrefixLen?: int
+	.IPAddress: string
+	.IPPrefixLen: int
+	.IPv6Gateway: string
+	.MacAddress: string
+	.Networks: Bridge
+	.Ports: undefined
 }
 type InspectResponse: void {
 	.AppArmorProfile: string
@@ -146,15 +197,17 @@ type InspectResponse: void {
 	.LogPath: string
 	.Id: string
 	.Image: string
+	.GraphDriver?: undefined
 	.MountLabel: string
 	.Name: string
-	.NetworkSettings: Networks
+	.NetworkSettings: NetworkSettings
 	.Path: string
 	.ProcessLabel: string
 	.ResolvConfPath: string
 	.RestartCount: int
 	.State: State
 	.Mounts[0, *]: Mount
+	.ExecIDs: undefined
 }
 
 interface InterfaceAPI {

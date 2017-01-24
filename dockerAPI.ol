@@ -16,12 +16,12 @@ outputPort DockerD {
     .debug=1;
     .osc.containers.alias = "containers/json";
     .osc.containers.method = "get";
-    .osc.containers.method.queryFormat = "json"
-    // .osc.inspect.alias = "containers/%!{id}/json";
-    // .osc.inspect.method = "get";
-    // .osc.inspect.method.queryFormat = "json"
+    .osc.containers.method.queryFormat = "json";
+    .osc.inspect.alias = "containers/%!{id}/json";
+    .osc.inspect.method = "get";
+    .osc.inspect.method.queryFormat = "json"
   }
-  RequestResponse: containers
+  RequestResponse: containers, inspect
 }
 
 main {
@@ -31,9 +31,12 @@ main {
     response.container<<responseByDocker._;
     valueToPrettyString@StringUtils( response )( s );
     println@Console(s)()
-    // response<<responseByDocker
   }]
-  // [inspect(request)(response){
-    
-  // }]
+  [inspect(request)(response){
+    println@Console("***** INSPECT "+ request.id +" CONTAINER *****")();
+    inspect@DockerD(request)(responseByDocker);
+    response<<responseByDocker;
+    valueToPrettyString@StringUtils( response )( s );
+    println@Console(s)()
+  }]
 }
