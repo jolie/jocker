@@ -10,7 +10,7 @@ type ContainersRequest: void {
 }
 type ListRunProcessesRequest: void {
 	.id: string			//< ID or name of the container
-	.ps_args: string	// The arguments to pass to ps
+	.ps_args?: string	// The arguments to pass to ps
 }
 type BridgeType: void{
 	.Aliases?: undefined

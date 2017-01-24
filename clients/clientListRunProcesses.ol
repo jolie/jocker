@@ -12,7 +12,6 @@ outputPort DockerIn {
 
 main {
 
-	rq.ps_args="aux";
 	rq.id="web";
 	println@Console("***** LIST RUN PROCESSES OF "+ rq.id +" CONTAINER *****")();
 	listRunProcesses@DockerIn(rq)(response);
