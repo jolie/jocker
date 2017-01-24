@@ -25,13 +25,22 @@ outputPort DockerD {
     .osc.listRunProcesses.method.queryFormat = "json";
     .osc.logs.alias = "containers/%!{id}/logs";
     .osc.logs.method = "get";
-    .osc.logs.method.queryFormat = "json"
+    .osc.logs.method.queryFormat = "json";
+    .osc.images.alias = "images/json";
+    .osc.images.method = "get";
+    .osc.images.method.queryFormat = "json"
   }
-  RequestResponse: containers, inspect, listRunProcesses, logs
+  RequestResponse: containers, inspect, listRunProcesses, logs, images
 }
 
 main {
   [containers(request)(response){
+    if(!is_defined(request.all)){
+      request.all = false
+    };
+    if(!is_defined(request.size)){
+      request.size = false
+    };
     containers@DockerD(request)(responseByDocker);
     response.container<<responseByDocker._;
     valueToPrettyString@StringUtils( response )( s );
@@ -74,6 +83,18 @@ main {
     };
     logs@DockerD(request)(responseByDocker);
     response.log<<responseByDocker;
+    valueToPrettyString@StringUtils( response )( s );
+    println@Console(s)()
+  }]
+  [images(request)(response){
+    if(!is_defined(request.all)){
+      request.all = false
+    };
+    if(!is_defined(request.digest)){
+      request.digest = false
+    };
+    images@DockerD(request)(responseByDocker);
+    response.images<<responseByDocker._;
     valueToPrettyString@StringUtils( response )( s );
     println@Console(s)()
   }]

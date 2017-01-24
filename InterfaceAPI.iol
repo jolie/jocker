@@ -3,7 +3,7 @@ type InspectRequest: void {
   	.id: string  		//< ID or name of the container
 }
 type ContainersRequest: void {
-  	.all: bool          //< Show all containers. Only running containers are shown by default
+  	.all?: bool          //< Show all containers. Only running containers are shown by default
 	.limit?: int        //< Show limit last created containers, include non-running ones.
   	.size?: bool        //< Show the containers sizes
   	.filters?: undefined
@@ -20,6 +20,11 @@ type LogsRequest: void {
   	.since?:	int		// Specifying a timestamp will only output log-entries since that timestamp
   	.timestamps?: bool	// print timestamps for every log line
   	.tail?: string		// Only return this number of log lines from the end of the logs. Specify as an integer or all to output all log lines
+}
+type ImagesRequest: void {
+	.all?: bool			// Show all images. Only images from a final layer (no children) are shown by default.
+	.filters?: undefined
+	.digest?: bool		// Show digest information as a RepoDigests field on each image
 }
 type BridgeType: void{
 	.Aliases?: undefined
@@ -236,11 +241,28 @@ type ListRunProcessesResponse: void {
 type LogsResponse: void {
 	.log: undefined
 }
+type ImageType: void {
+	.Id: string
+	.ParentId: string
+	.RepoTags[0, *]: string
+	.RepoDigests: undefined
+	.Created: int
+	.Size: int
+	.VirtualSize: int
+	.SharedSize: int
+	.Labels: undefined
+	.Containers: int
+}
+// data-type of an ImagesResponse
+type ImagesResponse: void {
+	.images[0, *]: ImageType
+}
 
 interface InterfaceAPI {
   RequestResponse:
   	containers( ContainersRequest )( ContainersResponse ),
     inspect( InspectRequest )( InspectResponse ),
     listRunProcesses( ListRunProcessesRequest )( ListRunProcessesResponse ),
-    logs( LogsRequest )( LogsResponse )
+    logs( LogsRequest )( LogsResponse ),
+    images( ImagesRequest )( ImagesResponse )
 }
