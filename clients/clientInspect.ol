@@ -12,6 +12,7 @@ outputPort DockerIn {
 
 main {
 	rq.id = "jolie-ctn";
+	println@Console("***** INSPECT "+ rq.id +" CONTAINER *****")();
 	inspect@DockerIn(rq)(response);
 	valueToPrettyString@StringUtils(response)(s);
 	println@Console( s )()

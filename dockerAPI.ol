@@ -19,23 +19,34 @@ outputPort DockerD {
     .osc.containers.method.queryFormat = "json";
     .osc.inspect.alias = "containers/%!{id}/json";
     .osc.inspect.method = "get";
-    .osc.inspect.method.queryFormat = "json"
+    .osc.inspect.method.queryFormat = "json";
+    .osc.listRunProcesses.alias = "containers/%!{id}/top";
+    .osc.listRunProcesses.method = "get";
+    .osc.listRunProcesses.method.queryFormat = "json"
   }
-  RequestResponse: containers, inspect
+  RequestResponse: containers, inspect, listRunProcesses
 }
 
 main {
   [containers(request)(response){
-    println@Console("***** RETURN THE LIST OF ALL CONTAINER *****")();
     containers@DockerD(request)(responseByDocker);
     response.container<<responseByDocker._;
     valueToPrettyString@StringUtils( response )( s );
     println@Console(s)()
   }]
   [inspect(request)(response){
-    println@Console("***** INSPECT "+ request.id +" CONTAINER *****")();
     inspect@DockerD(request)(responseByDocker);
     response<<responseByDocker;
+    valueToPrettyString@StringUtils( response )( s );
+    println@Console(s)()
+  }]
+  [listRunProcesses(request)(response){
+    if(request.ps_args==""){
+      request.ps_args="-ef"
+    };
+    listRunProcesses@DockerD(request)(responseByDocker);
+    response.Titles<<responseByDocker.Titles;
+    response.Processes.row<<responseByDocker.Processes._;
     valueToPrettyString@StringUtils( response )( s );
     println@Console(s)()
   }]

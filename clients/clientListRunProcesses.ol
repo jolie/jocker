@@ -11,9 +11,11 @@ outputPort DockerIn {
 }
 
 main {
-	println@Console("***** RETURN THE LIST OF ALL CONTAINER *****")();
-	rq.all = true;
-	containers@DockerIn(rq)(response);
+
+	rq.ps_args="aux";
+	rq.id="web";
+	println@Console("***** LIST RUN PROCESSES OF "+ rq.id +" CONTAINER *****")();
+	listRunProcesses@DockerIn(rq)(response);
 	valueToPrettyString@StringUtils(response)(s);
 	println@Console( s )()
 }

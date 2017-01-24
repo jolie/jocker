@@ -8,6 +8,10 @@ type ContainersRequest: void {
   	.size?: bool        //< Show the containers sizes
   	.filters?: undefined
 }
+type ListRunProcessesRequest: void {
+	.id: string			//< ID or name of the container
+	.ps_args: string	// The arguments to pass to ps
+}
 type BridgeType: void{
 	.Aliases?: undefined
 	.Links?: undefined
@@ -58,6 +62,7 @@ type ContainerType: void {
 	.HostConfig: undefined
 	.Id: string
 }
+// data-type of an ContainersResponse
 type ContainersResponse: void{
 	.container[0, *]: ContainerType 
 }
@@ -185,6 +190,7 @@ type NetworkSettings: void {
 	.Networks: Bridge
 	.Ports: undefined
 }
+// data-type of an InspectResponse
 type InspectResponse: void {
 	.AppArmorProfile: string
 	.Args[0, *]: string
@@ -209,9 +215,18 @@ type InspectResponse: void {
 	.Mounts[0, *]: Mount
 	.ExecIDs: undefined
 }
+type Processes: void {
+	.row[0, *]: string
+}
+// data-type of an ListRunProcessesResponse
+type ListRunProcessesResponse: void {
+	.Titles[0, *]: string
+	.Processes[0, *]: Processes
+}
 
 interface InterfaceAPI {
   RequestResponse:
   	containers( ContainersRequest )( ContainersResponse ),
-    inspect( InspectRequest )( InspectResponse )
+    inspect( InspectRequest )( InspectResponse ),
+    listRunProcesses( ListRunProcessesRequest )( ListRunProcessesResponse )
 }
