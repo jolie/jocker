@@ -28,9 +28,33 @@ outputPort DockerD {
     .osc.logs.method.queryFormat = "json";
     .osc.images.alias = "images/json";
     .osc.images.method = "get";
-    .osc.images.method.queryFormat = "json"
+    .osc.images.method.queryFormat = "json";
+    .osc.inspectImage.alias = "images/%!{name}/json";
+    .osc.inspectImage.method = "get";
+    .osc.inspectImage.method.queryFormat = "json";
+    .osc.imageHistory.alias = "images/%!{name}/history";
+    .osc.imageHistory.method = "get";
+    .osc.imageHistory.method.queryFormat = "json";
+    .osc.imageSearch.alias = "images/search";
+    .osc.imageSearch.method = "get";
+    .osc.imageSearch.method.queryFormat = "json";
+    .osc.removeImage.alias = "images/%!{name}";
+    .osc.removeImage.method = "delete";
+    .osc.removeImage.method.queryFormat = "json";
+    .osc.exportImage.alias = "images/%!{name}/get";
+    .osc.exportImage.method = "get";
+    .osc.exportImage.method.queryFormat = "json";
+    .osc.changesOnCtn.alias = "containers/%!{id}/changes";
+    .osc.changesOnCtn.method = "get";
+    .osc.changesOnCtn.method.queryFormat = "json";
+    .osc.exportContainer.alias = "containers/%!{id}/export";
+    .osc.exportContainer.method = "get";
+    .osc.exportContainer.method.queryFormat = "json";
+    .osc.statsContainer.alias = "containers/%!{id}/stats";
+    .osc.statsContainer.method = "get";
+    .osc.statsContainer.method.queryFormat = "json"
   }
-  RequestResponse: containers, inspect, listRunProcesses, logs, images
+  RequestResponse: containers, inspect, listRunProcesses, logs, images, inspectImage, imageHistory, imageSearch, removeImage, exportImage, changesOnCtn, exportContainer, statsContainer
 }
 
 main {
@@ -95,6 +119,63 @@ main {
     };
     images@DockerD(request)(responseByDocker);
     response.images<<responseByDocker._;
+    valueToPrettyString@StringUtils( response )( s );
+    println@Console(s)()
+  }]
+  [inspectImage(request)(response){
+    inspectImage@DockerD(request)(responseByDocker);
+    response<<responseByDocker;
+    valueToPrettyString@StringUtils( response )( s );
+    println@Console(s)()
+  }]
+  [imageHistory(request)(response){
+    imageHistory@DockerD(request)(responseByDocker);
+    response.histories<<responseByDocker._;
+    valueToPrettyString@StringUtils( response )( s );
+    println@Console(s)()
+  }]
+  [imageSearch(request)(response){
+    imageSearch@DockerD(request)(responseByDocker);
+    response.results<<responseByDocker._;
+    valueToPrettyString@StringUtils( response )( s );
+    println@Console(s)()
+  }]
+  [removeImage(request)(response){
+    if(!is_defined(request.force)){
+      request.force = false
+    };
+    if(!is_defined(request.noprune)){
+      request.noprune = false
+    };
+    removeImage@DockerD(request)(responseByDocker);
+    response<<responseByDocker;
+    valueToPrettyString@StringUtils( response )( s );
+    println@Console(s)()
+  }]
+  [exportImage(request)(response){
+    exportImage@DockerD(request)(responseByDocker);
+    response.exporting<<responseByDocker;
+    valueToPrettyString@StringUtils( response )( s );
+    println@Console(s)()
+  }]
+  [changesOnCtn(request)(response){
+    changesOnCtn@DockerD(request)(responseByDocker);
+    response.changes<<responseByDocker._;
+    valueToPrettyString@StringUtils( response )( s );
+    println@Console(s)()
+  }]
+  [exportContainer(request)(response){
+    exportContainer@DockerD(request)(responseByDocker);
+    response<<responseByDocker;
+    valueToPrettyString@StringUtils( response )( s );
+    println@Console(s)()
+  }]
+  [statsContainer(request)(response){
+    if(!is_defined(request.stream)){
+      request.stream = false
+    };
+    statsContainer@DockerD(request)(responseByDocker);
+    response<<responseByDocker;
     valueToPrettyString@StringUtils( response )( s );
     println@Console(s)()
   }]
