@@ -52,17 +52,32 @@ outputPort DockerD {
     .osc.exportContainer.method.queryFormat = "json";
     .osc.statsContainer.alias = "containers/%!{id}/stats";
     .osc.statsContainer.method = "get";
-    .osc.statsContainer.method.queryFormat = "json"
+    .osc.statsContainer.method.queryFormat = "json";
+    .osc.networks.alias = "networks";
+    .osc.networks.method = "get";
+    .osc.networks.method.queryFormat = "json";
+    .osc.inspectNetwork.alias = "networks/%!{id}";
+    .osc.inspectNetwork.method = "get";
+    .osc.inspectNetwork.method.queryFormat = "json";
+    .osc.volumes.alias = "volumes";
+    .osc.volumes.method = "get";
+    .osc.volumes.method.queryFormat = "json";
+    .osc.inspectVolume.alias = "volumes/%!{name}";
+    .osc.inspectVolume.method = "get";
+    .osc.inspectVolume.method.queryFormat = "json";
+    .osc.createContainer.alias = "containers/create";
+    .osc.createContainer.method = "post";
+    .osc.createContainer.method.queryFormat = "json"
   }
-  RequestResponse: containers, inspect, listRunProcesses, logs, images, inspectImage, imageHistory, imageSearch, removeImage, exportImage, changesOnCtn, exportContainer, statsContainer
+  RequestResponse: containers, inspect, listRunProcesses, logs, images, inspectImage, imageHistory, imageSearch, removeImage, exportImage, changesOnCtn, exportContainer, statsContainer, networks, inspectNetwork, volumes, inspectVolume, createContainer
 }
 
 main {
   [containers(request)(response){
-    if(!is_defined(request.all)){
+    if(!(is_defined(request.all))){
       request.all = false
     };
-    if(!is_defined(request.size)){
+    if(!(is_defined(request.size))){
       request.size = false
     };
     containers@DockerD(request)(responseByDocker);
@@ -77,7 +92,7 @@ main {
     println@Console(s)()
   }]
   [listRunProcesses(request)(response){
-    if(!is_defined(request.ps_args)){
+    if(!(is_defined(request.ps_args))){
       request.ps_args="-ef"
     };
     listRunProcesses@DockerD(request)(responseByDocker);
@@ -87,22 +102,22 @@ main {
     println@Console(s)()
   }]
   [logs(request)(response){
-    if(!is_defined(request.follow)){
+    if(!(is_defined(request.follow))){
       request.follow = false
     };
-    if(!is_defined(request.stderr)){
+    if(!(is_defined(request.stderr))){
       request.stderr = false
     };
-    if(!is_defined(request.stdout)){
+    if(!(is_defined(request.stdout))){
       request.stdout = false
     };
-    if(!is_defined(request.since)){
+    if(!(is_defined(request.since))){
       request.since = 0
     };
-    if(!is_defined(request.timestamps)){
+    if(!(is_defined(request.timestamps))){
       request.timestamps = false
     };
-    if(!is_defined(request.tail)){
+    if(!(is_defined(request.tail))){
       request.tail = "all"
     };
     logs@DockerD(request)(responseByDocker);
@@ -111,10 +126,10 @@ main {
     println@Console(s)()
   }]
   [images(request)(response){
-    if(!is_defined(request.all)){
+    if(!(is_defined(request.all))){
       request.all = false
     };
-    if(!is_defined(request.digest)){
+    if(!(is_defined(request.digest))){
       request.digest = false
     };
     images@DockerD(request)(responseByDocker);
@@ -141,10 +156,10 @@ main {
     println@Console(s)()
   }]
   [removeImage(request)(response){
-    if(!is_defined(request.force)){
+    if(!(is_defined(request.force))){
       request.force = false
     };
-    if(!is_defined(request.noprune)){
+    if(!(is_defined(request.noprune))){
       request.noprune = false
     };
     removeImage@DockerD(request)(responseByDocker);
@@ -171,10 +186,64 @@ main {
     println@Console(s)()
   }]
   [statsContainer(request)(response){
-    if(!is_defined(request.stream)){
+    if(!(is_defined(request.stream))){
       request.stream = false
     };
     statsContainer@DockerD(request)(responseByDocker);
+    response<<responseByDocker;
+    valueToPrettyString@StringUtils( response )( s );
+    println@Console(s)()
+  }]
+  [networks(request)(response){
+    networks@DockerD(request)(responseByDocker);
+    response.network<<responseByDocker._;
+    valueToPrettyString@StringUtils( response )( s );
+    println@Console(s)()
+  }]
+  [inspectNetwork(request)(response){
+    inspectNetwork@DockerD(request)(responseByDocker);
+    response.result<<responseByDocker;
+    valueToPrettyString@StringUtils( response )( s );
+    println@Console(s)()
+  }]
+  [volumes(request)(response){
+    volumes@DockerD(request)(responseByDocker);
+    response<<responseByDocker;
+    valueToPrettyString@StringUtils( response )( s );
+    println@Console(s)()
+  }]
+  [inspectVolume(request)(response){
+    inspectVolume@DockerD(request)(responseByDocker);
+    response<<responseByDocker;
+    valueToPrettyString@StringUtils( response )( s );
+    println@Console(s)()
+  }]
+  [createContainer(request)(response){
+    if(!(is_defined(request.AttachStdin))){
+      request.AttachStdin = false
+    };
+    if(!(is_defined(request.AttachStdout))){
+      request.AttachStdout = true
+    };
+    if(!(is_defined(request.AttachStderr))){
+      request.AttachStderr = true
+    };
+    if(!(is_defined(request.OpenStdin))){
+      request.OpenStdin = false
+    };
+    if(!(is_defined(request.StdinOnce))){
+      request.StdinOnce = false
+    };
+    if(!(is_defined(request.NetworkDisabled))){
+      request.NetworkDisabled = false
+    };
+    if(!(is_defined(request.StopSignal))){
+      request.StopSignal = "SIGTERM"
+    };
+    if(!(is_defined(request.StopTimeout))){
+      request.StopTimeout = 10
+    };
+    createContainer@DockerD(request)(responseByDocker);
     response<<responseByDocker;
     valueToPrettyString@StringUtils( response )( s );
     println@Console(s)()

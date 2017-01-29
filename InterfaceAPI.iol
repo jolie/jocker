@@ -79,6 +79,139 @@ type StatsContainerRequest: void {
 	.id: string
 	.stream?: bool
 }
+type NetworksRequest: void {
+	.filters?: string {
+		.driver?: string
+		.id?: string
+		.label?: undefined
+		.name?: string
+		.type?: string
+	}
+}
+type InspectNetworkRequest: void {
+	.id: string			// Network ID or name 
+}
+type VolumesRequest: void {
+	.filters?: string {
+		.name?: string
+		.dangling?: bool
+		.driver?: string
+	}
+}
+type InspectVolumeRequest: void {
+	.name: string		// Volume name or ID
+}
+type CreateContainerRequest: void {
+	.name?: string		// Assign the specified name to the container. Must match /?[a-zA-Z0-9_-]+
+  	.Hostname?: string
+  	.Domainname?: string
+  	.User?: string
+  	.AttachStdin?: bool
+  	.AttachStdout?: bool
+  	.AttachStderr?: bool
+  	.Tty?: bool
+  	.OpenStdin?: bool
+  	.StdinOnce?: bool
+  	.Env[0, *]: string
+  	.Cmd[0, *]: string
+  	.Entrypoint[0, *]: string
+  	.Image?: string
+  	.Labels?: undefined
+  	.Volumes?: undefined
+  	.WorkingDir?: string
+  	.NetworkDisabled?: bool
+  	.MacAddress?: string
+  	.ExposedPorts?: undefined
+  	.StopSignal?: string
+  	.StopTimeout?: int
+  	.HostConfig?: void {
+    	.MaximumIOps?: int
+    	.MaximumIOBps?: int
+    	.BlkioWeight?: int
+    	.BlkioWeightDevice[0, *]: undefined
+    	.BlkioDeviceReadBps[0, *]: undefined
+    	.BlkioDeviceWriteBps[0, *]: undefined
+    	.BlkioDeviceReadIOps[0, *]: undefined
+    	.BlkioDeviceWriteIOps[0, *]: undefined
+    	.Binds?: undefined
+    	.ContainerIDFile?: string
+    	.CpusetCpus?: string
+    	.CpusetMems?: string
+    	.CpuPercent?: int
+	    .CpuShares?: int
+	    .CpuPeriod?: int
+	    .CpuQuota?: int
+	    .CpuCount?: int
+	    .CpuRealtimePeriod?: int
+	    .CpuRealtimeRuntime?: int
+	    .CapAdd?: undefined
+	    .CapDrop?: undefined
+	    .CgroupParent?: string
+	    .GroupAdd?: undefined
+	    .Devices[0, *]: undefined
+	    .DiskQuota?: int
+	    .DnsOptions[0, *]: undefined
+	    .Dns[0, *]: undefined
+	    .DnsSearch?: undefined
+	    .VolumesFrom?: undefined
+	    .IpcMode?: string
+	    .Isolation?: string
+	    .LxcConf[0, *]: undefined
+	    .Memory?: int
+	    .MemorySwappiness?: int
+	    .MemorySwap?: int
+	    .MemoryReservation?: int
+	    .KernelMemory?: int
+	    .OomKillDisable?: bool
+	    .OomScoreAdj?: int
+	    .NetworkMode?: string
+	    .NanoCpus?: int
+	    .PidMode?: string
+	    .PortBindings?: undefined
+	    .Privileged?: bool
+	    .PidsLimit?: int
+	    .ReadonlyRootfs?: bool
+	    .Runtime?: string
+	    .PublishAllPorts?: bool
+	    .RestartPolicy?: undefined
+	    .LogConfig[0, *]: undefined
+	    .Sysctls?: undefined
+	    .Ulimits[0, *]: undefined
+	    .VolumeDriver?: string
+	    .ShmSize?: int
+	    .UsernsMode?: string
+	    .ExtraHosts?: undefined
+	    .UTSMode?: string
+	    .Cgroup?: string
+	    .IOMaximumIOps?: int
+	    .IOMaximumBandwidth?: int
+	    .AutoRemove?: bool
+	    .ConsoleSize[0, *]: int
+	    .Links?: undefined
+	    .SecurityOpt?: undefined
+  	}
+  	.NetworkingConfig?: void {
+    	.EndpointsConfig?: void {
+      		.isolated_nw?: void {
+        		.IPAMConfig?: void {
+          			.IPv4Address?: string
+          			.IPv6Address?: string
+          			.LinkLocalIPs[0, *]: string
+        		}
+        		.Links[0, *]: string
+        		.Aliases[0, *]: string
+      		}
+    	}
+  	}
+
+}
+
+
+
+
+
+
+
 type Bridge: void {
 	.bridge: void {
 		.Aliases?: undefined
@@ -112,9 +245,6 @@ type Mount: void {
 	.Rw?: bool
 	.Propagation?: string
 }
-type ContainerType: void {
-	
-}
 // data-type of an ContainersResponse
 type ContainersResponse: void{
 	.container[0, *]: void {
@@ -130,7 +260,9 @@ type ContainersResponse: void{
 		.Command?: string
 		.State?: string
 		.ImageID?: string
-		.HostConfig?: undefined
+		.HostConfig?: void {
+			.NetworkMode: string
+		}
 		.Id?: string
 	} 
 }
@@ -468,7 +600,77 @@ type StatsContainerResponse: void {
 	}
 
 }
-
+type NetworkType: void {
+	.Name?: string
+	.Id?: string
+	.Created?: string
+	.Scope?: string
+	.Driver?: string
+	.EnableIPv6?: bool
+	.Internal?: bool
+	.Labels?: undefined
+	.Attachable?: bool
+	.IPAM?: void {
+		.Driver?: string
+		.Config[0, *]: void {
+			.Subnet?: string
+			.Gateway?: string
+		}
+		.Options?: undefined
+	}
+	.Containers?: undefined
+	.Options?: undefined
+	// 	.com_docker_network_bridge_default_bridge?: string
+	// 	.com_docker_network_bridge_enable_icc?: string
+	// 	.com_docker_network_bridge_enable_ip_masquerade?: string
+	// 	.com_docker_network_bridge_host_binding_ipv4?: string
+	// 	.com_docker_network_bridge_name?: string
+	// 	.com_docker_network_driver_mtu?: string
+	// }
+}
+// data-type of an NetworksResponse
+type NetworksResponse: void {
+	.network[0, *]: NetworkType
+}
+// data-type of an InspectNetworkResponse
+type InspectNetworkResponse: void {
+	.result: NetworkType
+}
+// data-type of an VolumesResponse
+type VolumesResponse: void {
+	.Volumes[0, *]: void {
+		.Name: string
+		.Driver: string
+		.Mountpoint: string
+		.Labels: undefined
+		.Scope: undefined
+		.Options?: void {
+			.device?: string
+			.o?: string
+			.type?: string
+		}
+	}
+	.Warnings[0, *]: void
+}
+// data-type of an InspectVolumeResponse
+type InspectVolumeResponse: void {
+	.Name: string
+	.Driver: string
+	.Mountpoint: string
+	.Status?: undefined
+	.Labels: undefined
+	.Options?: void {
+		.device?: string
+		.o?: string
+		.type?: string
+	}
+	.Scope: string
+} 
+// data-type of an CreateContainerResponse
+type CreateContainerResponse: void {
+	.Id: string
+	.Warnings[0, *]: undefined
+}
 
 interface InterfaceAPI {
   RequestResponse:
@@ -484,5 +686,10 @@ interface InterfaceAPI {
     exportImage( ExportImageRequest )( ExportImageResponse ),
     changesOnCtn( ChangesRequest )( ChangesResponse ),
     exportContainer( ExportContainerRequest )( undefined ),
-    statsContainer( StatsContainerRequest )( StatsContainerResponse )
+    statsContainer( StatsContainerRequest )( StatsContainerResponse ),
+    networks( NetworksRequest )( NetworksResponse ),
+    inspectNetwork( InspectNetworkRequest )( InspectNetworkResponse ),
+    volumes( VolumesRequest )( VolumesResponse ),
+    inspectVolume( InspectVolumeRequest )( InspectVolumeResponse ),
+    createContainer( CreateContainerRequest )( CreateContainerResponse )
 }
