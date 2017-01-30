@@ -14,6 +14,8 @@ outputPort DockerD {
   Location: "socket://192.168.99.100:2357"
   Protocol: http {
     .debug=1;
+    .debug.showContent=1;
+    .format="json";
     .osc.containers.alias = "containers/json";
     .osc.containers.method = "get";
     .osc.containers.method.queryFormat = "json";
@@ -67,13 +69,22 @@ outputPort DockerD {
     .osc.inspectVolume.method.queryFormat = "json";
     .osc.createContainer.alias = "containers/create";
     .osc.createContainer.method = "post";
-    .osc.createContainer.method.queryFormat = "json"
+    .osc.createContainer.method.queryFormat = "json";
+    .osc.startContainer.alias = "containers/%!{id}/start";
+    .osc.startContainer.method = "post";
+    .osc.startContainer.method.queryFormat = "json";
+    .osc.renameContainer.alias = "containers/%!{id}/rename";
+    .osc.renameContainer.method = "post";
+    .osc.renameContainer.method.queryFormat = "json";
+    .osc.stopContainer.alias = "containers/%!{id}/stop";
+    .osc.stopContainer.method = "post";
+    .osc.stopContainer.method.queryFormat = "json"
   }
-  RequestResponse: containers, inspect, listRunProcesses, logs, images, inspectImage, imageHistory, imageSearch, removeImage, exportImage, changesOnCtn, exportContainer, statsContainer, networks, inspectNetwork, volumes, inspectVolume, createContainer
+  RequestResponse: containers, inspect, listRunProcesses, logs, images, inspectImage, imageHistory, imageSearch, removeImage, exportImage, changesOnCtn, exportContainer, statsContainer, networks, inspectNetwork, volumes, inspectVolume, createContainer, startContainer, renameContainer, stopContainer
 }
-
+// DA METTERE IN ORDINE ALFABETICO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 main {
-  [containers(request)(response){
+  [ containers( request )( response ) {
     if(!(is_defined(request.all))){
       request.all = false
     };
@@ -85,6 +96,8 @@ main {
     valueToPrettyString@StringUtils( response )( s );
     println@Console(s)()
   }]
+
+
   [inspect(request)(response){
     inspect@DockerD(request)(responseByDocker);
     response<<responseByDocker;
@@ -163,7 +176,7 @@ main {
       request.noprune = false
     };
     removeImage@DockerD(request)(responseByDocker);
-    response<<responseByDocker;
+    response.info<<responseByDocker._;
     valueToPrettyString@StringUtils( response )( s );
     println@Console(s)()
   }]
@@ -218,7 +231,7 @@ main {
     valueToPrettyString@StringUtils( response )( s );
     println@Console(s)()
   }]
-  [createContainer(request)(response){
+  [createContainer( request )( response ){
     if(!(is_defined(request.AttachStdin))){
       request.AttachStdin = false
     };
@@ -243,9 +256,33 @@ main {
     if(!(is_defined(request.StopTimeout))){
       request.StopTimeout = 10
     };
-    createContainer@DockerD(request)(responseByDocker);
+    createContainer@DockerD( request )( responseByDocker );
     response<<responseByDocker;
     valueToPrettyString@StringUtils( response )( s );
-    println@Console(s)()
+    println@Console( s )()
+  }]
+
+
+  [startContainer( request )( response ){
+    startContainer@DockerD( request )( responseByDocker );
+    response<<responseByDocker;
+    valueToPrettyString@StringUtils( response )( s );
+    println@Console( s )()
+  }]
+
+
+  [renameContainer( request )( response ){
+    renameContainer@DockerD( request )( responseByDocker );
+    response<<responseByDocker;
+    valueToPrettyString@StringUtils( response )( s );
+    println@Console( s )()
+  }]
+
+
+  [stopContainer( request )( response ){
+    stopContainer@DockerD( request )( responseByDocker );
+    response<<responseByDocker;
+    valueToPrettyString@StringUtils( response )( s );
+    println@Console( s )()
   }]
 }

@@ -1,3 +1,5 @@
+// < ---------------------------------- START OF REQUEST TYPE DEFINITION ---------------------------------- >
+
 type InspectRequest: void {
   	.size?: bool        //< Return container size information.
   	.id: string  		//< ID or name of the container
@@ -205,12 +207,20 @@ type CreateContainerRequest: void {
   	}
 
 }
+type StartContainerRequest: void {
+	.id: string 			// ID or name of the container
+	.detachKeys?: string	// Override the key sequence for detaching a container. Format is a single character [a-Z] or ctrl-<value> where <value> is one of: a-z, @, ^, [, , or _
+}
+type RenameContainerRequest: void {
+	.id: string				// ID or name of the container
+	.name?: string			// name to replace 
+}
+type StopContainerRequest: void {
+	.id: string				// ID or name of the container
+	.t?: int 				// Number of seconds to wait before killing the container
+}
 
-
-
-
-
-
+// < ---------------------------------- END OF REQUEST TYPE DEFINITION ---------------------------------- >
 
 type Bridge: void {
 	.bridge: void {
@@ -471,7 +481,7 @@ type ImageHistoryResponse: void {
 		.Id: string
 		.Created: int
 		.CreatedBy: string
-		.Tags[0, *]: string
+		.Tags[0, *]: undefined 
 		.Size: int
 		.Comment: string 
 	}
@@ -489,8 +499,10 @@ type ImageSearchResponse: void {
 }
 // data-type of an RemoveImageResponse
 type RemoveImageResponse: void {
-	.Untagged?: string
-	.Deleted?: string
+	.info[0, *]: void {
+		.Untagged?: string
+		.Deleted?: string
+	}
 }
 // data-type of an ExportImageResponse
 type ExportImageResponse: void {
@@ -671,6 +683,18 @@ type CreateContainerResponse: void {
 	.Id: string
 	.Warnings[0, *]: undefined
 }
+// data-type of an StartContainerResponse
+type StartContainerResponse: void {
+	.message?: string
+}
+// data-type of an RenameContainerResponse
+type RenameContainerResponse: void {
+	.message?: string
+}
+// data-type of an StopContainerResponse
+type StopContainerResponse: void {
+
+}
 
 interface InterfaceAPI {
   RequestResponse:
@@ -691,5 +715,8 @@ interface InterfaceAPI {
     inspectNetwork( InspectNetworkRequest )( InspectNetworkResponse ),
     volumes( VolumesRequest )( VolumesResponse ),
     inspectVolume( InspectVolumeRequest )( InspectVolumeResponse ),
-    createContainer( CreateContainerRequest )( CreateContainerResponse )
+    createContainer( CreateContainerRequest )( CreateContainerResponse ),
+    startContainer( StartContainerRequest )( StartContainerResponse ),
+    renameContainer( RenameContainerRequest )( RenameContainerResponse ),
+    stopContainer( StopContainerRequest )( StopContainerResponse )
 }

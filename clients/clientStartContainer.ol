@@ -11,10 +11,9 @@ outputPort DockerIn {
 }
 
 main {
-	rq.name = "myFirstCtn";
-	rq.Image = "nginx";
-	println@Console("***** CREATE CONTAINER *****")();
-	createContainer@DockerIn(rq)(response);
+	rq.id = "zen_euler";
+	println@Console("***** START " +rq.id+ " CONTAINER *****")();
+	startContainer@DockerIn(rq)(response);
 	valueToPrettyString@StringUtils( response )( s );
 	println@Console( s )()
 }
