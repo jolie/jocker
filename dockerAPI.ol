@@ -73,7 +73,7 @@ outputPort DockerD {
     .osc.startContainer.alias = "containers/%!{id}/start";
     .osc.startContainer.method = "post";
     .osc.startContainer.method.queryFormat = "json";
-    .osc.renameContainer.alias = "containers/%!{id}/rename";
+    .osc.renameContainer.alias = "containers/%!{dId}/rename";
     .osc.renameContainer.method = "post";
     .osc.renameContainer.method.queryFormat = "json";
     .osc.stopContainer.alias = "containers/%!{id}/stop";

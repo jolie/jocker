@@ -208,12 +208,12 @@ type CreateContainerRequest: void {
 
 }
 type StartContainerRequest: void {
-	.id: string 			// ID or name of the container
+	.id: string 			    // ID or name of the container
 	.detachKeys?: string	// Override the key sequence for detaching a container. Format is a single character [a-Z] or ctrl-<value> where <value> is one of: a-z, @, ^, [, , or _
 }
 type RenameContainerRequest: void {
-	.id: string				// ID or name of the container
-	.name?: string			// name to replace
+	.id: string				  // ID or name of the container
+	.name: string			  // name to replace
 }
 type StopContainerRequest: void {
 	.id: string				// ID or name of the container
