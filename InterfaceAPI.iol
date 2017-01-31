@@ -91,7 +91,7 @@ type NetworksRequest: void {
 	}
 }
 type InspectNetworkRequest: void {
-	.id: string			// Network ID or name 
+	.id: string			// Network ID or name
 }
 type VolumesRequest: void {
 	.filters?: string {
@@ -104,7 +104,7 @@ type InspectVolumeRequest: void {
 	.name: string		// Volume name or ID
 }
 type CreateContainerRequest: void {
-	.name?: string		// Assign the specified name to the container. Must match /?[a-zA-Z0-9_-]+
+	  .Name?: string		// Assign the specified name to the container. Must match /?[a-zA-Z0-9_-]+
   	.Hostname?: string
   	.Domainname?: string
   	.User?: string
@@ -213,11 +213,78 @@ type StartContainerRequest: void {
 }
 type RenameContainerRequest: void {
 	.id: string				// ID or name of the container
-	.name?: string			// name to replace 
+	.name?: string			// name to replace
 }
 type StopContainerRequest: void {
 	.id: string				// ID or name of the container
-	.t?: int 				// Number of seconds to wait before killing the container
+	.t?: int 				  // Number of seconds to wait before killing the container
+}
+type RemoveContainerRequest: void {
+  .id: string       // ID or name of the container
+  .v?: bool         // Remove the volumes associated with the container
+  .force?: bool     // If the container is running, kill it before removing it
+}
+type RestartContainerRequest: void {
+  .id: string       // ID or name of the container
+  .t?: int          // Number of seconds to wait before killing the container
+}
+type BuildRequest: void {
+  .Content_type?: string
+  .X_Registry_Config?: string
+  .dockerfile?: string   // Path within the build context to the Dockerfile. This is ignored if remote is specified and points to an external Dockerfile
+  .t?: string
+  .remote?: string
+  .q?: bool
+  .nocache?: bool
+  .cachefrom?: string
+  .pull?: string
+  .rm?: bool
+  .forcerm?: bool
+  .memory?: int
+  .memswap?: int
+  .cpushares?: int
+  .cpusetcpus?: string
+  .cpuperiod?: int
+  .cpuquota?: int
+  .buildargs?: int
+  .shmsize?: int
+  .squash?: bool
+  .labels?: string
+  .networkmode?: string
+}
+type CreateVolumeRequest: void {
+  .Name?: string        // Volume name or ID
+  .Driver?: string
+  .DriverOpts[0, *]: string
+  .Labels?: undefined
+}
+type RemoveVolumeRequest: void {
+  .name: string         // Volume name or ID
+  .force?: bool
+}
+type RemoveNetworkRequest: void {
+  .id: string         // Network name or ID
+}
+type CreateNetworkRequest: void {
+  .Name: string
+  .CheckDuplicate?: bool
+  .Driver?: string
+  .Internal?: bool
+  .IPAM?: void {
+		.Driver?: string
+		.Config[0, *]: void {
+			.Subnet?: string
+			.Gateway?: string
+		}
+		.Options?: undefined
+	}
+  .EnableIPv6?: bool
+  .Options?: undefined
+  .Labels?: undefined
+}
+type KillContainerRequest: void {
+  .id: string       // Container name or ID
+  .signal?: string  // Signal to send to the container as an integer or string (e.g. SIGINT)
 }
 
 // < ---------------------------------- END OF REQUEST TYPE DEFINITION ---------------------------------- >
@@ -274,7 +341,7 @@ type ContainersResponse: void{
 			.NetworkMode: string
 		}
 		.Id?: string
-	} 
+	}
 }
 type Config: void {
 	.Entrypoint?: undefined
@@ -481,9 +548,9 @@ type ImageHistoryResponse: void {
 		.Id: string
 		.Created: int
 		.CreatedBy: string
-		.Tags[0, *]: undefined 
+		.Tags[0, *]: undefined
 		.Size: int
-		.Comment: string 
+		.Comment: string
 	}
 }
 // data-type of an ImageSearchResponse
@@ -495,7 +562,7 @@ type ImageSearchResponse: void {
 		.name?: string
 		.star_count?: int
 	}
-	
+
 }
 // data-type of an RemoveImageResponse
 type RemoveImageResponse: void {
@@ -552,7 +619,7 @@ type StatsContainerResponse: void {
 			.pgpgout?: int
 			.rss?: int
 			.total_mapped_file?:int
-			.writeback?: int 
+			.writeback?: int
 			.unevictable?: int
 			.pgpgin?: int
 			.total_unevictable?: int
@@ -632,13 +699,6 @@ type NetworkType: void {
 	}
 	.Containers?: undefined
 	.Options?: undefined
-	// 	.com_docker_network_bridge_default_bridge?: string
-	// 	.com_docker_network_bridge_enable_icc?: string
-	// 	.com_docker_network_bridge_enable_ip_masquerade?: string
-	// 	.com_docker_network_bridge_host_binding_ipv4?: string
-	// 	.com_docker_network_bridge_name?: string
-	// 	.com_docker_network_driver_mtu?: string
-	// }
 }
 // data-type of an NetworksResponse
 type NetworksResponse: void {
@@ -677,7 +737,7 @@ type InspectVolumeResponse: void {
 		.type?: string
 	}
 	.Scope: string
-} 
+}
 // data-type of an CreateContainerResponse
 type CreateContainerResponse: void {
 	.Id: string
@@ -693,9 +753,53 @@ type RenameContainerResponse: void {
 }
 // data-type of an StopContainerResponse
 type StopContainerResponse: void {
-
+  .message?: string
+}
+// data-type of an RemoveContainerResponse
+type RemoveContainerResponse: void {
+  .message?: string
+}
+// data-type of an RestartContainerResponse
+type RestartContainerResponse: void {
+  .message?: string
+}
+// data-type of an BuildResponse
+type BuildResponse: void {
+  .message?: string
+}
+// data-type of an CreateVolumeResponse
+type CreateVolumeResponse: void {
+  .Name: string
+  .Driver: string
+  .Mountpoint: string
+  .Status?: undefined
+  .Labels: undefined
+  .Scope: string
+  .Options: undefined
+  .UsageData?: void {
+    .Size: int
+    .RefCount: int
+  }
+}
+// data-type of an RemoveVolumeResponse
+type RemoveVolumeResponse: void {
+  .message?: string
+}
+// data-type of an RemoveNetworkResponse
+type RemoveNetworkResponse: void {
+  .message?: string
+}
+// data-type of an CreateNetworkResponse
+type CreateNetworkResponse: void {
+  .Id?: string
+  .Warning?: string
+}
+// data-type of an KillContainerResponse
+type KillContainerResponse: void {
+  .message?: string
 }
 
+// < ---------------------------------- END OF RESPONSE TYPE DEFINITION ---------------------------------- >
 interface InterfaceAPI {
   RequestResponse:
   	containers( ContainersRequest )( ContainersResponse ),
@@ -718,5 +822,13 @@ interface InterfaceAPI {
     createContainer( CreateContainerRequest )( CreateContainerResponse ),
     startContainer( StartContainerRequest )( StartContainerResponse ),
     renameContainer( RenameContainerRequest )( RenameContainerResponse ),
-    stopContainer( StopContainerRequest )( StopContainerResponse )
+    stopContainer( StopContainerRequest )( StopContainerResponse ),
+    removeContainer( RemoveContainerRequest )( RemoveContainerResponse ),
+    restartContainer( RestartContainerRequest )( RestartContainerResponse ),
+    build( BuildRequest )( BuildResponse ),
+    createVolume( CreateVolumeRequest )( CreateVolumeResponse ),
+    removeVolume( RemoveVolumeRequest )( RemoveVolumeResponse ),
+    removeNetwork( RemoveNetworkRequest )( RemoveNetworkResponse ),
+    createNetwork( CreateNetworkRequest )( CreateNetworkResponse ),
+    killContainer( KillContainerRequest )( KillContainerResponse )
 }

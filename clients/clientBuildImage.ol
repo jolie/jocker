@@ -10,11 +10,9 @@ outputPort DockerIn {
 	Interfaces: InterfaceAPI
 }
 
-main {
-	rq.Name = "myFirstCtn";
-	rq.Image = "nginx";
-	println@Console("***** CREATE CONTAINER *****")();
-	createContainer@DockerIn(rq)(response);
+main { 
+	println@Console("***** BUILD IMAGE *****")();
+	build@DockerIn(rq)(response);
 	valueToPrettyString@StringUtils( response )( s );
 	println@Console( s )()
 }

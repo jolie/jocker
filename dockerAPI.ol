@@ -78,211 +78,327 @@ outputPort DockerD {
     .osc.renameContainer.method.queryFormat = "json";
     .osc.stopContainer.alias = "containers/%!{id}/stop";
     .osc.stopContainer.method = "post";
-    .osc.stopContainer.method.queryFormat = "json"
+    .osc.stopContainer.method.queryFormat = "json";
+		.osc.removeContainer.alias = "containers/%!{id}";
+    .osc.removeContainer.method = "delete";
+    .osc.removeContainer.method.queryFormat = "json";
+		.osc.restartContainer.alias = "containers/%!{id}/restart";
+    .osc.restartContainer.method = "post";
+    .osc.restartContainer.method.queryFormat = "json";
+		.osc.build.alias = "build";
+    .osc.build.method = "post";
+    .osc.build.method.queryFormat = "json";
+		.osc.createVolume.alias = "volumes/create";
+    .osc.createVolume.method = "post";
+    .osc.createVolume.method.queryFormat = "json";
+		.osc.removeVolume.alias = "volumes/%!{name}";
+    .osc.removeVolume.method = "delete";
+    .osc.removeVolume.method.queryFormat = "json";
+		.osc.removeNetwork.alias = "networks/%!{id}";
+    .osc.removeNetwork.method = "delete";
+    .osc.removeNetwork.method.queryFormat = "json";
+		.osc.createNetwork.alias = "networks/create";
+    .osc.createNetwork.method = "post";
+    .osc.createNetwork.method.queryFormat = "json";
+		.osc.killContainer.alias = "containers/%!{id}/kill";
+    .osc.killContainer.method = "post";
+    .osc.killContainer.method.queryFormat = "json"
   }
-  RequestResponse: containers, inspect, listRunProcesses, logs, images, inspectImage, imageHistory, imageSearch, removeImage, exportImage, changesOnCtn, exportContainer, statsContainer, networks, inspectNetwork, volumes, inspectVolume, createContainer, startContainer, renameContainer, stopContainer
+  RequestResponse:
+	build,
+	changesOnCtn,
+	containers,
+	createContainer,
+	createNetwork,
+	createVolume,
+	exportContainer,
+	exportImage,
+	images,
+	imageHistory,
+	imageSearch,
+	inspect,
+	inspectImage,
+	inspectNetwork,
+	inspectVolume,
+	killContainer,
+	listRunProcesses,
+	logs,
+	networks,
+	removeContainer,
+	removeImage,
+	removeNetwork,
+	removeVolume,
+	renameContainer,
+	restartContainer,
+	startContainer,
+	statsContainer,
+	stopContainer,
+	volumes
 }
 // DA METTERE IN ORDINE ALFABETICO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 main {
   [ containers( request )( response ) {
-    if(!(is_defined(request.all))){
+    if( !(is_defined( request.all ))){
       request.all = false
     };
-    if(!(is_defined(request.size))){
+    if( !(is_defined( request.size ))){
       request.size = false
     };
-    containers@DockerD(request)(responseByDocker);
-    response.container<<responseByDocker._;
-    valueToPrettyString@StringUtils( response )( s );
-    println@Console(s)()
+    containers@DockerD( request )( responseByDocker );
+    response.container<<responseByDocker._
   }]
 
 
-  [inspect(request)(response){
-    inspect@DockerD(request)(responseByDocker);
-    response<<responseByDocker;
-    valueToPrettyString@StringUtils( response )( s );
-    println@Console(s)()
+  [ inspect( request )( response ) {
+    inspect@DockerD( request )( responseByDocker );
+    response<<responseByDocker
   }]
-  [listRunProcesses(request)(response){
-    if(!(is_defined(request.ps_args))){
+
+
+  [ listRunProcesses( request )( response ) {
+    if( !(is_defined( request.ps_args ))){
       request.ps_args="-ef"
     };
-    listRunProcesses@DockerD(request)(responseByDocker);
+    listRunProcesses@DockerD(  request  )(  responseByDocker  );
     response.Titles<<responseByDocker.Titles;
-    response.Processes.row<<responseByDocker.Processes._;
-    valueToPrettyString@StringUtils( response )( s );
-    println@Console(s)()
+    response.Processes.row<<responseByDocker.Processes._
   }]
-  [logs(request)(response){
-    if(!(is_defined(request.follow))){
+
+
+  [ logs( request )( response ){
+    if( !( is_defined( request.follow ))){
       request.follow = false
     };
-    if(!(is_defined(request.stderr))){
+    if( !( is_defined( request.stderr ))){
       request.stderr = false
     };
-    if(!(is_defined(request.stdout))){
+    if( !( is_defined( request.stdout ))){
       request.stdout = false
     };
-    if(!(is_defined(request.since))){
+    if( !( is_defined( request.since ))){
       request.since = 0
     };
-    if(!(is_defined(request.timestamps))){
+    if( !( is_defined( request.timestamps ))){
       request.timestamps = false
     };
-    if(!(is_defined(request.tail))){
+    if( !( is_defined( request.tail ))){
       request.tail = "all"
     };
-    logs@DockerD(request)(responseByDocker);
-    response.log<<responseByDocker;
-    valueToPrettyString@StringUtils( response )( s );
-    println@Console(s)()
+    logs@DockerD( request )( responseByDocker );
+    response.log<<responseByDocker
   }]
-  [images(request)(response){
-    if(!(is_defined(request.all))){
+
+
+  [ images( request )( response ){
+    if( !( is_defined(  request.all  ))){
       request.all = false
     };
-    if(!(is_defined(request.digest))){
+    if(  !( is_defined( request.digest ))){
       request.digest = false
     };
-    images@DockerD(request)(responseByDocker);
-    response.images<<responseByDocker._;
-    valueToPrettyString@StringUtils( response )( s );
-    println@Console(s)()
+    images@DockerD( request )( responseByDocker );
+    response.images<<responseByDocker._
   }]
-  [inspectImage(request)(response){
-    inspectImage@DockerD(request)(responseByDocker);
-    response<<responseByDocker;
-    valueToPrettyString@StringUtils( response )( s );
-    println@Console(s)()
+
+
+  [ inspectImage( request )( response ){
+    inspectImage@DockerD( request )( responseByDocker );
+    response<<responseByDocker
   }]
-  [imageHistory(request)(response){
-    imageHistory@DockerD(request)(responseByDocker);
-    response.histories<<responseByDocker._;
-    valueToPrettyString@StringUtils( response )( s );
-    println@Console(s)()
+
+
+  [ imageHistory( request )( response ){
+    imageHistory@DockerD( request )( responseByDocker );
+    response.histories<<responseByDocker._
   }]
-  [imageSearch(request)(response){
-    imageSearch@DockerD(request)(responseByDocker);
-    response.results<<responseByDocker._;
-    valueToPrettyString@StringUtils( response )( s );
-    println@Console(s)()
+
+
+  [ imageSearch( request )( response ){
+    imageSearch@DockerD( request )( responseByDocker );
+    response.results<<responseByDocker._
   }]
-  [removeImage(request)(response){
-    if(!(is_defined(request.force))){
+
+
+  [ removeImage( request )( response ){
+    if( !(is_defined( request.force ))){
       request.force = false
     };
-    if(!(is_defined(request.noprune))){
+    if( !(is_defined( request.noprune ))){
       request.noprune = false
     };
-    removeImage@DockerD(request)(responseByDocker);
-    response.info<<responseByDocker._;
-    valueToPrettyString@StringUtils( response )( s );
-    println@Console(s)()
+    removeImage@DockerD( request )( responseByDocker );
+    response.info<<responseByDocker._
   }]
-  [exportImage(request)(response){
-    exportImage@DockerD(request)(responseByDocker);
-    response.exporting<<responseByDocker;
-    valueToPrettyString@StringUtils( response )( s );
-    println@Console(s)()
+
+
+  [ exportImage( request )( response ){
+    exportImage@DockerD( request )( responseByDocker );
+    response.exporting<<responseByDocker
   }]
-  [changesOnCtn(request)(response){
-    changesOnCtn@DockerD(request)(responseByDocker);
-    response.changes<<responseByDocker._;
-    valueToPrettyString@StringUtils( response )( s );
-    println@Console(s)()
+
+
+  [ changesOnCtn( request )( response ){
+    changesOnCtn@DockerD( request )( responseByDocker );
+    response.changes<<responseByDocker._
   }]
-  [exportContainer(request)(response){
-    exportContainer@DockerD(request)(responseByDocker);
-    response<<responseByDocker;
-    valueToPrettyString@StringUtils( response )( s );
-    println@Console(s)()
+
+
+  [ exportContainer( request )( response ){
+    exportContainer@DockerD( request )( responseByDocker );
+    response<<responseByDocker
   }]
-  [statsContainer(request)(response){
-    if(!(is_defined(request.stream))){
+
+
+  [ statsContainer( request )( response ){
+    if( !(is_defined( request.stream ))){
       request.stream = false
     };
-    statsContainer@DockerD(request)(responseByDocker);
-    response<<responseByDocker;
-    valueToPrettyString@StringUtils( response )( s );
-    println@Console(s)()
+    statsContainer@DockerD( request )( responseByDocker );
+    response<<responseByDocker
   }]
-  [networks(request)(response){
-    networks@DockerD(request)(responseByDocker);
-    response.network<<responseByDocker._;
-    valueToPrettyString@StringUtils( response )( s );
-    println@Console(s)()
+  [ networks( request )( response ){
+    networks@DockerD( request )( responseByDocker );
+    response.network<<responseByDocker._
   }]
-  [inspectNetwork(request)(response){
-    inspectNetwork@DockerD(request)(responseByDocker);
-    response.result<<responseByDocker;
-    valueToPrettyString@StringUtils( response )( s );
-    println@Console(s)()
+
+
+  [ inspectNetwork( request )( response ){
+    inspectNetwork@DockerD( request )( responseByDocker );
+    response.result<<responseByDocker
   }]
-  [volumes(request)(response){
-    volumes@DockerD(request)(responseByDocker);
-    response<<responseByDocker;
-    valueToPrettyString@StringUtils( response )( s );
-    println@Console(s)()
+
+
+  [ volumes( request )( response ){
+    volumes@DockerD( request )( responseByDocker );
+    response<<responseByDocker
   }]
-  [inspectVolume(request)(response){
-    inspectVolume@DockerD(request)(responseByDocker);
-    response<<responseByDocker;
-    valueToPrettyString@StringUtils( response )( s );
-    println@Console(s)()
+
+
+  [ inspectVolume( request )( response ){
+    inspectVolume@DockerD( request )( responseByDocker );
+    response<<responseByDocker
   }]
-  [createContainer( request )( response ){
-    if(!(is_defined(request.AttachStdin))){
+
+
+  [ createContainer( request )( response ){
+    if( !(is_defined( request.AttachStdin ))){
       request.AttachStdin = false
     };
-    if(!(is_defined(request.AttachStdout))){
+    if( !(is_defined( request.AttachStdout ))){
       request.AttachStdout = true
     };
-    if(!(is_defined(request.AttachStderr))){
+    if( !(is_defined( request.AttachStderr ))){
       request.AttachStderr = true
     };
-    if(!(is_defined(request.OpenStdin))){
+    if( !(is_defined( request.OpenStdin ))){
       request.OpenStdin = false
     };
-    if(!(is_defined(request.StdinOnce))){
+    if( !(is_defined( request.StdinOnce ))){
       request.StdinOnce = false
     };
-    if(!(is_defined(request.NetworkDisabled))){
+    if( !(is_defined( request.NetworkDisabled ))){
       request.NetworkDisabled = false
     };
-    if(!(is_defined(request.StopSignal))){
+    if( !(is_defined( request.StopSignal ))){
       request.StopSignal = "SIGTERM"
     };
-    if(!(is_defined(request.StopTimeout))){
+    if( !(is_defined( request.StopTimeout ))){
       request.StopTimeout = 10
     };
     createContainer@DockerD( request )( responseByDocker );
-    response<<responseByDocker;
-    valueToPrettyString@StringUtils( response )( s );
-    println@Console( s )()
+    response<<responseByDocker
   }]
 
 
-  [startContainer( request )( response ){
+  [ startContainer( request )( response ){
     startContainer@DockerD( request )( responseByDocker );
-    response<<responseByDocker;
-    valueToPrettyString@StringUtils( response )( s );
-    println@Console( s )()
+    response<<responseByDocker
   }]
 
 
-  [renameContainer( request )( response ){
+  [ renameContainer( request )( response ){
     renameContainer@DockerD( request )( responseByDocker );
-    response<<responseByDocker;
-    valueToPrettyString@StringUtils( response )( s );
-    println@Console( s )()
+    response<<responseByDocker
   }]
 
 
-  [stopContainer( request )( response ){
+  [ stopContainer( request )( response ){
     stopContainer@DockerD( request )( responseByDocker );
-    response<<responseByDocker;
-    valueToPrettyString@StringUtils( response )( s );
-    println@Console( s )()
+    response<<responseByDocker
   }]
+
+
+	[ removeContainer( request )( response ){
+		removeContainer@DockerD( request )( responseByDocker );
+    response<<responseByDocker
+	}]
+
+
+	[ restartContainer( request )( response ){
+		restartContainer@DockerD( request )( responseByDocker );
+    response<<responseByDocker
+	}]
+
+
+	[ build( request )( response ){
+		if( !(is_defined( request.dockerfile ))){
+      request.dockerfile = "Dockerfile"
+    };
+		if( !(is_defined( request.q ))){
+      request.q = false
+    };
+		if( !(is_defined( request.nocache ))){
+      request.nocache = false
+    };
+		if( !(is_defined( request.rm ))){
+      request.rm = true
+    };
+		if( !(is_defined( request.forcerm ))){
+      request.forcerm = false
+    };
+		if( !(is_defined( request.Content_type ))){
+      request.Content_type = "application/tar"
+    };
+		build@DockerD( request )( responseByDocker );
+    response<<responseByDocker
+	}]
+
+
+	[ createVolume( request )( response ){
+		createVolume@DockerD( request )( responseByDocker );
+    response<<responseByDocker
+	}]
+
+
+	[ removeVolume( request )( response ){
+		if( !(is_defined( request.force ))){
+      request.force = false
+    };
+		removeVolume@DockerD( request )( responseByDocker );
+    response<<responseByDocker
+	}]
+
+
+	[ removeNetwork( request )( response ){
+		removeNetwork@DockerD( request )( responseByDocker );
+    response<<responseByDocker
+	}]
+
+
+	[ createNetwork( request )( response ){
+		if( !(is_defined( request.Driver ))){
+      request.Driver = "bridge"
+    };
+		createNetwork@DockerD( request )( responseByDocker );
+    response<<responseByDocker
+	}]
+
+
+	[killContainer( request )( response ){
+		if( !(is_defined( request.signal ))){
+      request.signal = "SIGKILL"
+    };
+		killContainer@DockerD( request )( responseByDocker );
+    response<<responseByDocker
+	}]
 }
