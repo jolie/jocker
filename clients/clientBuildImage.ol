@@ -10,7 +10,8 @@ outputPort DockerIn {
 	Interfaces: InterfaceAPI
 }
 
-main { 
+main {
+	rq.dockerfile = "TestingBuild.tgz";
 	println@Console("***** BUILD IMAGE *****")();
 	build@DockerIn(rq)(response);
 	valueToPrettyString@StringUtils( response )( s );

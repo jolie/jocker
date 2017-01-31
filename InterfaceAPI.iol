@@ -230,27 +230,27 @@ type RestartContainerRequest: void {
 }
 type BuildRequest: void {
   .Content_type?: string
-  .X_Registry_Config?: string
-  .dockerfile?: string   // Path within the build context to the Dockerfile. This is ignored if remote is specified and points to an external Dockerfile
-  .t?: string
-  .remote?: string
-  .q?: bool
-  .nocache?: bool
-  .cachefrom?: string
-  .pull?: string
-  .rm?: bool
-  .forcerm?: bool
+  .X_Registry_Config?: string     // This is a base64-encoded JSON object with auth configurations for multiple registries that a build may refer to
+  .dockerfile?: string            // Path within the build context to the Dockerfile. This is ignored if remote is specified and points to an external Dockerfile
+  .t?: string                     // A name and optional tag to apply to the image in the name:tag format. If you omit the tag the default latest value is assumed. You can provide several t parameters
+  .remote?: string                // A Git repository URI or HTTP/HTTPS context URI
+  .q?: bool                       // Suppress verbose build output
+  .nocache?: bool                 // Do not use the cache when building the image
+  .cachefrom?: string             // JSON array of images used for build cache resolution
+  .pull?: string                  // Attempt to pull the image even if an older image exists locally
+  .rm?: bool                      // Remove intermediate containers after a successful build
+  .forcerm?: bool                 // Always remove intermediate containers, even upon failure
   .memory?: int
-  .memswap?: int
+  .memswap?: int                  // Set as -1 to disable swap
   .cpushares?: int
   .cpusetcpus?: string
   .cpuperiod?: int
   .cpuquota?: int
-  .buildargs?: int
+  .buildargs?: int                // JSON map of string pairs for build-time variables. Users pass these values at build-time
   .shmsize?: int
   .squash?: bool
   .labels?: string
-  .networkmode?: string
+  .networkmode?: string           // Sets the networking mode for the run commands during build. Supported standard values are: bridge, host, none, and container:<name|id>. Any other value is taken as a custom network's name to which this container should connect to
 }
 type CreateVolumeRequest: void {
   .Name?: string        // Volume name or ID
