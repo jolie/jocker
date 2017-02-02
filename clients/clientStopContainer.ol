@@ -11,8 +11,8 @@ outputPort DockerIn {
 }
 
 main {
-	rq.id = "zen_euler";
-	
+	rq.id = "web";
+
 	println@Console("***** STOP " +rq.id+ " CONTAINER *****")();
 	stopContainer@DockerIn(rq)(response);
 	valueToPrettyString@StringUtils( response )( s );

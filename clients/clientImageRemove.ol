@@ -11,7 +11,7 @@ outputPort DockerIn {
 }
 
 main {
-	rq.name = "abjocker/docker-whale";
+	rq.name = "0c23d08df18b";
 	rq.force = true;
 	println@Console("***** REMOVE "+ rq.name +" IMAGE *****")();
 	removeImage@DockerIn(rq)(response);

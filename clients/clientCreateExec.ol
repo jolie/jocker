@@ -1,7 +1,6 @@
 include "console.iol"
 include "string_utils.iol"
 include "json_utils.iol"
-include "file.iol"
 
 include "../InterfaceAPI.iol"
 
@@ -12,13 +11,9 @@ outputPort DockerIn {
 }
 
 main {
-	file.filename = "TestingBuild.tar";
-	file.format = "binary";
-	readFile@File(file)(rq.file);
-
-	rq.t = "first:latest";
-	println@Console("***** BUILD IMAGE *****")();
-	build@DockerIn(rq)(response);
+	rq.id = "web";
+	println@Console("***** CREATE EXEC IN " +rq.id+ " CONTAINER *****")();
+	createExec@DockerIn(rq)(response);
 	valueToPrettyString@StringUtils( response )( s );
 	println@Console( s )()
 }

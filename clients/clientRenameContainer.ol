@@ -11,8 +11,8 @@ outputPort DockerIn {
 }
 
 main {
-	rq.id = "zen_euler";
-	rq.name = "zenno";
+	rq.id = "euler";
+	rq.name = "zen_euler";
 	println@Console("***** RENAME " +rq.id+ " CONTAINER *****")();
 	renameContainer@DockerIn(rq)(response);
 	valueToPrettyString@StringUtils( response )( s );

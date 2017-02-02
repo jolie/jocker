@@ -11,7 +11,7 @@ outputPort DockerIn {
 }
 
 main {
-	rq.id = "zen_euler";
+	rq.id = "pippo";
 	println@Console("***** START " +rq.id+ " CONTAINER *****")();
 	startContainer@DockerIn(rq)(response);
 	valueToPrettyString@StringUtils( response )( s );

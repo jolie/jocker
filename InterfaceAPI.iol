@@ -229,9 +229,10 @@ type RestartContainerRequest: void {
   .t?: int          // Number of seconds to wait before killing the container
 }
 type BuildRequest: void {
+  .file: raw
   .Content_type?: string
   .X_Registry_Config?: string     // This is a base64-encoded JSON object with auth configurations for multiple registries that a build may refer to
-  .dockerfile?: string            // Path within the build context to the Dockerfile. This is ignored if remote is specified and points to an external Dockerfile
+  .dockerfile?: string               // Path within the build context to the Dockerfile. This is ignored if remote is specified and points to an external Dockerfile
   .t?: string                     // A name and optional tag to apply to the image in the name:tag format. If you omit the tag the default latest value is assumed. You can provide several t parameters
   .remote?: string                // A Git repository URI or HTTP/HTTPS context URI
   .q?: bool                       // Suppress verbose build output
@@ -285,6 +286,30 @@ type CreateNetworkRequest: void {
 type KillContainerRequest: void {
   .id: string       // Container name or ID
   .signal?: string  // Signal to send to the container as an integer or string (e.g. SIGINT)
+}
+type PauseContainerRequest: void {
+  .id: string       // Container name or ID
+}
+type UnpauseContainerRequest: void {
+  .id: string       // Container name or ID
+}
+type WaitContainerRequest: void {
+  .id: string       // Container name or ID
+}
+type DeleteStopContainersRequest: void {
+  .filters?: string
+}
+type CreateExecRequest: void {
+  .id: string            // Container name or ID
+  .AttachStdin?: bool
+  .AttachStdout?: bool
+  .AttachStderr?: bool
+  .DetachKeys?: string
+  .Tty?: bool
+  .Cmd[0, *]: string
+  .Env[0, *]: string
+  .Privileged?: bool    // Runs the exec process with extended privileges
+  .User?: string        // The user, and optionally, group to run the exec process inside the container. Format is one of: user, user:group, uid, or uid:gid
 }
 
 // < ---------------------------------- END OF REQUEST TYPE DEFINITION ---------------------------------- >
@@ -798,6 +823,28 @@ type CreateNetworkResponse: void {
 type KillContainerResponse: void {
   .message?: string
 }
+// data-type of an PauseContainerResponse
+type PauseContainerResponse: void {
+  .message?: string
+}
+// data-type of an UnpauseContainerResponse
+type UnpauseContainerResponse: void {
+  .message?: string
+}
+// data-type of an WaitContainerResponse
+type WaitContainerResponse: void {
+  .StatusCode: int
+}
+// data-type of an DeleteStopContainersResponse
+type DeleteStopContainersResponse: void {
+  .ContainersDeleted[0, *]: string
+  .SpaceReclaimed?: int
+}
+// data-type of an CreateExecResponse
+type CreateExecResponse: void {
+  .Id: string
+  .message?: string
+}
 
 // < ---------------------------------- END OF RESPONSE TYPE DEFINITION ---------------------------------- >
 interface InterfaceAPI {
@@ -830,5 +877,10 @@ interface InterfaceAPI {
     removeVolume( RemoveVolumeRequest )( RemoveVolumeResponse ),
     removeNetwork( RemoveNetworkRequest )( RemoveNetworkResponse ),
     createNetwork( CreateNetworkRequest )( CreateNetworkResponse ),
-    killContainer( KillContainerRequest )( KillContainerResponse )
+    killContainer( KillContainerRequest )( KillContainerResponse ),
+    pauseContainer( PauseContainerRequest )( PauseContainerResponse ),
+    unpauseContainer( UnpauseContainerRequest )( UnpauseContainerResponse ),
+    waitContainer( WaitContainerRequest )( WaitContainerResponse ),
+    deleteStopContainers( DeleteStopContainersRequest )( DeleteStopContainersResponse ),
+    createExec( CreateExecRequest )( CreateExecResponse )
 }
