@@ -6,7 +6,7 @@ type InspectRequest: void {
 }
 type ContainersRequest: void {
   	.all?: bool          //< Show all containers. Only running containers are shown by default
-	.limit?: int        //< Show limit last created containers, include non-running ones.
+	  .limit?: int        //< Show limit last created containers, include non-running ones.
   	.size?: bool        //< Show the containers sizes
   	.filters?: string {
   		.exited?: int
@@ -104,7 +104,7 @@ type InspectVolumeRequest: void {
 	.name: string		// Volume name or ID
 }
 type CreateContainerRequest: void {
-	  .Name?: string		// Assign the specified name to the container. Must match /?[a-zA-Z0-9_-]+
+	  .name?: string		// Assign the specified name to the container. Must match /?[a-zA-Z0-9_-]+
   	.Hostname?: string
   	.Domainname?: string
   	.User?: string
@@ -517,6 +517,8 @@ type InspectResponse: void {
 	.State?: State
 	.Mounts[0, *]: Mount
 	.ExecIDs?: undefined
+  .SizeRootFs?: int
+  .SizeRw?: int
 }
 // data-type of an ListRunProcessesResponse
 type ListRunProcessesResponse: void {

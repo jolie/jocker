@@ -11,7 +11,7 @@ outputPort DockerIn {
 }
 
 main {
-	rq.Name = "myFirstCtn";
+	rq.name = "myFirstCtn3";
 	rq.Image = "nginx";
 	println@Console("***** CREATE CONTAINER *****")();
 	createContainer@DockerIn(rq)(response);

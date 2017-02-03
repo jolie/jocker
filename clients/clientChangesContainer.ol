@@ -11,7 +11,7 @@ outputPort DockerIn {
 }
 
 main {
-	rq.id = "pippo";
+	rq.id = "web";
 	println@Console("***** CHANGES ON "+ rq.id +" CONTAINER's FILESYSTEM *****")();
 	changesOnCtn@DockerIn(rq)(response);
 	valueToPrettyString@StringUtils( response )( s );

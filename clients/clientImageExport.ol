@@ -11,7 +11,7 @@ outputPort DockerIn {
 }
 
 main {
-	rq.name = "imgjolie";
+	rq.name = "nginx:latest";
 	println@Console("***** EXPORT "+ rq.name +" IMAGE *****")();
 	exportImage@DockerIn(rq)(response);
 	valueToPrettyString@StringUtils( response )( s );

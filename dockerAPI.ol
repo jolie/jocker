@@ -42,7 +42,7 @@ outputPort DockerD {
     .osc.imageSearch.alias = "images/search";
     .osc.imageSearch.method = "get";
     .osc.imageSearch.method.queryFormat = "json";
-    .osc.removeImage.alias = "images/%!{name}";
+    .osc.removeImage.alias = "images/%!{name}?force=%!{force}&noprune=%!{noprune}";
     .osc.removeImage.method = "delete";
     .osc.removeImage.method.queryFormat = "json";
     .osc.exportImage.alias = "images/%!{name}/get";
@@ -69,7 +69,7 @@ outputPort DockerD {
     .osc.inspectVolume.alias = "volumes/%!{name}";
     .osc.inspectVolume.method = "get";
     .osc.inspectVolume.method.queryFormat = "json";
-    .osc.createContainer.alias = "containers/create";
+    .osc.createContainer.alias = "containers/create?name=%!{name}";
     .osc.createContainer.method = "post";
     .osc.createContainer.method.queryFormat = "json";
     .osc.startContainer.alias = "containers/%!{id}/start";
@@ -90,7 +90,7 @@ outputPort DockerD {
 		.osc.createVolume.alias = "volumes/create";
     .osc.createVolume.method = "post";
     .osc.createVolume.method.queryFormat = "json";
-		.osc.removeVolume.alias = "volumes/%!{name}";
+		.osc.removeVolume.alias = "volumes/%!{name}?force=%!{force}";
     .osc.removeVolume.method = "delete";
     .osc.removeVolume.method.queryFormat = "json";
 		.osc.removeNetwork.alias = "networks/%!{id}";
@@ -158,7 +158,7 @@ outputPort DockerD {
 	waitContainer
 }
 
-// execution{ concurrent }
+execution{ concurrent }
 
 init {
 	format = "json";
@@ -170,6 +170,8 @@ main {
 	[ build( request )( response ){
 		scope( build )
 		{
+			install( serverError => println@Console("Internal server error")() );
+			install( badParam => println@Console("Bad parameter")() );
 			install( default => nullProcess );
 			format = "binary";
 			contentType = "application/tar";
@@ -194,7 +196,19 @@ main {
 			request = request.file;
 			undef( request.file );
 			build@DockerD( request )( responseByDocker );
-	    response<<responseByDocker
+			if( responseByDocker.("@header").statusCode == 400 )
+			{
+				throw( badParam )
+			}
+			else if( responseByDocker.("@header").statusCode == 500 )
+			{
+				throw( serverError )
+			}
+			else
+			{
+				undef( responseByDocker.("@header") );
+				response<<responseByDocker
+			}
 		}
 	}]
 
@@ -215,6 +229,7 @@ main {
 			}
 			else
 			{
+				undef( responseByDocker.("@header") );
 				response.changes<<responseByDocker._
 			}
 		}
@@ -222,44 +237,93 @@ main {
 
 
 	[ containers( request )( response ) {
-    if( !(is_defined( request.all ))){
-      request.all = false
-    };
-    if( !(is_defined( request.size ))){
-      request.size = false
-    };
-    containers@DockerD( request )( responseByDocker );
-    response.container<<responseByDocker._
+		scope( containers )
+		{
+			install( serverError => println@Console("Internal server error")() );
+			install( badParam => println@Console("Bad parameter")() );
+			if( !(is_defined( request.all ))){
+	      request.all = false
+	    };
+	    if( !(is_defined( request.size ))){
+	      request.size = false
+	    };
+	    containers@DockerD( request )( responseByDocker );
+			if( responseByDocker.("@header").statusCode == 400 )
+			{
+				throw( badParam )
+			}
+			else if( responseByDocker.("@header").statusCode == 500 )
+			{
+				throw( serverError )
+			}
+			else
+			{
+				undef( responseByDocker.("@header") );
+				response.container<<responseByDocker._
+			}
+		}
   }]
 
 
 	[ createContainer( request )( response ){
-    if( !(is_defined( request.AttachStdin ))){
-      request.AttachStdin = false
-    };
-    if( !(is_defined( request.AttachStdout ))){
-      request.AttachStdout = true
-    };
-    if( !(is_defined( request.AttachStderr ))){
-      request.AttachStderr = true
-    };
-    if( !(is_defined( request.OpenStdin ))){
-      request.OpenStdin = false
-    };
-    if( !(is_defined( request.StdinOnce ))){
-      request.StdinOnce = false
-    };
-    if( !(is_defined( request.NetworkDisabled ))){
-      request.NetworkDisabled = false
-    };
-    if( !(is_defined( request.StopSignal ))){
-      request.StopSignal = "SIGTERM"
-    };
-    if( !(is_defined( request.StopTimeout ))){
-      request.StopTimeout = 10
-    };
-    createContainer@DockerD( request )( responseByDocker );
-    response<<responseByDocker
+		scope( createContainer )
+		{
+			install( serverError => println@Console("Internal server error")() );
+			install( badParam => println@Console("Bad parameter")() );
+			install( noSuch => println@Console("No such container")() );
+			install( noAttach => println@Console("Impossible to Attach")() );
+			install( conflict => println@Console("Conflict")() );
+			if( !(is_defined( request.AttachStdin ))){
+	      request.AttachStdin = false
+	    };
+	    if( !(is_defined( request.AttachStdout ))){
+	      request.AttachStdout = true
+	    };
+	    if( !(is_defined( request.AttachStderr ))){
+	      request.AttachStderr = true
+	    };
+	    if( !(is_defined( request.OpenStdin ))){
+	      request.OpenStdin = false
+	    };
+	    if( !(is_defined( request.StdinOnce ))){
+	      request.StdinOnce = false
+	    };
+	    if( !(is_defined( request.NetworkDisabled ))){
+	      request.NetworkDisabled = false
+	    };
+	    if( !(is_defined( request.StopSignal ))){
+	      request.StopSignal = "SIGTERM"
+	    };
+	    if( !(is_defined( request.StopTimeout ))){
+	      request.StopTimeout = 10
+	    };
+	    createContainer@DockerD( request )( responseByDocker );
+			if( responseByDocker.("@header").statusCode == 400 )
+			{
+				throw( badParam )
+			}
+			else if( responseByDocker.("@header").statusCode == 500 )
+			{
+				throw( serverError )
+			}
+			else if( responseByDocker.("@header").statusCode == 404 )
+			{
+				throw( noSuch )
+			}
+			else if( responseByDocker.("@header").statusCode == 406 )
+			{
+				throw( noAttach )
+			}
+			else if( responseByDocker.("@header").statusCode == 409 )
+			{
+				throw( conflict )
+			}
+			else
+			{
+				undef( responseByDocker.("@header") );
+		    response<<responseByDocker
+			}
+		}
   }]
 
 
@@ -273,223 +337,696 @@ main {
 
 
 	[ createNetwork( request )( response ){
-		if( !(is_defined( request.Driver ))){
-      request.Driver = "bridge"
-    };
-		createNetwork@DockerD( request )( responseByDocker );
-    response<<responseByDocker
+		scope( createNetwork )
+		{
+			install( serverError => println@Console("Internal server error")() );
+			install( plugNotFound => println@Console("Plugin not found")() );
+			install( notSupp => println@Console("Operation not supported for pre-defined networks")() );
+			if( !(is_defined( request.Driver ))){
+	      request.Driver = "bridge"
+	    };
+			createNetwork@DockerD( request )( responseByDocker );
+			if( responseByDocker.("@header").statusCode == 404 )
+			{
+				throw( plugNotFound )
+			}
+			else if( responseByDocker.("@header").statusCode == 500 )
+			{
+				throw( serverError )
+			}
+			else if( responseByDocker.("@header").statusCode == 403 )
+			{
+				throw( notSupp )
+			}
+			else
+			{
+				undef( responseByDocker.("@header") );
+				response<<responseByDocker
+			}
+		}
 	}]
 
 
 	[ createVolume( request )( response ){
-		createVolume@DockerD( request )( responseByDocker );
-    response<<responseByDocker
+		scope( createVolume )
+		{
+			install( serverError => println@Console("Internal server error")() );
+			createVolume@DockerD( request )( responseByDocker );
+			if( responseByDocker.("@header").statusCode == 500 )
+			{
+				throw( serverError )
+			}
+			else
+			{
+				undef( responseByDocker.("@header") );
+				response<<responseByDocker
+			}
+		}
 	}]
 
 
 	[ deleteStopContainers( request )( response ){
-		deleteStopContainers@DockerD( request )( responseByDocker );
-    response<<responseByDocker
+		scope( deleteStopContainers )
+		{
+			install( serverError => println@Console("Internal server error")() );
+			deleteStopContainers@DockerD( request )( responseByDocker );
+			if( responseByDocker.("@header").statusCode == 500 )
+			{
+				throw( serverError )
+			}
+			else
+			{
+				undef( responseByDocker.("@header") );
+				response<<responseByDocker
+			}
+		}
 	}]
 
 
 	[ exportContainer( request )( response ){
-    exportContainer@DockerD( request )( responseByDocker );
-    response<<responseByDocker
+		scope( exportContainer )
+		{
+			install( noSuch => println@Console("No such container")() );
+			install( serverError => println@Console("Internal server error")() );
+			exportContainer@DockerD( request )( responseByDocker );
+			if( responseByDocker.("@header").statusCode == 404 ) {
+				throw( noSuch )
+			}
+			else if( responseByDocker.("@header").statusCode == 500 )
+			{
+				throw( serverError )
+			}
+			else
+			{
+				undef( responseByDocker.("@header") );
+				response<<responseByDocker
+			}
+		}
   }]
 
 
 	[ exportImage( request )( response ){
-    exportImage@DockerD( request )( responseByDocker );
-    response.exporting<<responseByDocker
+		scope( exportImage )
+		{
+			install( serverError => println@Console("Internal server error")() );
+			exportImage@DockerD( request )( responseByDocker );
+			if( responseByDocker.("@header").statusCode == 500 )
+			{
+				throw( serverError )
+			}
+			else
+			{
+				undef( responseByDocker.("@header") );
+				response<<responseByDocker
+			}
+		}
   }]
 
 
 	[ images( request )( response ){
-    if( !( is_defined(  request.all  ))){
-      request.all = false
-    };
-    if(  !( is_defined( request.digest ))){
-      request.digest = false
-    };
-    images@DockerD( request )( responseByDocker );
-    response.images<<responseByDocker._
+		scope( images )
+		{
+			install( serverError => println@Console("Internal server error")() );
+	    if( !( is_defined(  request.all  ))){
+	      request.all = false
+	    };
+	    if(  !( is_defined( request.digest ))){
+	      request.digest = false
+	    };
+	    images@DockerD( request )( responseByDocker );
+			if( responseByDocker.("@header").statusCode == 500 )
+			{
+				throw( serverError )
+			}
+			else
+			{
+				undef( responseByDocker.("@header") );
+				response.images<<responseByDocker._
+			}
+		}
   }]
 
 
 	[ imageHistory( request )( response ){
-    imageHistory@DockerD( request )( responseByDocker );
-    response.histories<<responseByDocker._
+		scope( imageHistory )
+		{
+			install( serverError => println@Console("Internal server error")() );
+			install( noSuch => println@Console("No such image")() );
+			imageHistory@DockerD( request )( responseByDocker );
+			if( responseByDocker.("@header").statusCode == 404 )
+			{
+				throw( noSuch )
+			}
+			else if( responseByDocker.("@header").statusCode == 500 )
+			{
+				throw( serverError )
+			}
+			else
+			{
+				undef( responseByDocker.("@header") );
+				response.histories<<responseByDocker._
+			}
+		}
   }]
 
 
   [ imageSearch( request )( response ){
-    imageSearch@DockerD( request )( responseByDocker );
-    response.results<<responseByDocker._
+		scope( imageSearch )
+		{
+			install( serverError => println@Console("Internal server error")() );
+	    imageSearch@DockerD( request )( responseByDocker );
+			if( responseByDocker.("@header").statusCode == 500 )
+			{
+				throw( serverError )
+			}
+			else
+			{
+				undef( responseByDocker.("@header") );
+				response.results<<responseByDocker._
+			}
+		}
   }]
 
 
   [ inspect( request )( response ) {
-    inspect@DockerD( request )( responseByDocker );
-    response<<responseByDocker
+		scope( inspect )
+		{
+			install( serverError => println@Console("Internal server error")() );
+			install( badParam => println@Console("Bad parameter")() );
+			install( noSuch => println@Console("No such container")() );
+			inspect@DockerD( request )( responseByDocker );
+			if( responseByDocker.("@header").statusCode == 500 )
+			{
+				throw( serverError )
+			}
+			else if( responseByDocker.("@header").statusCode == 404 )
+			{
+				throw( noSuch )
+			}
+			else
+			{
+				undef( responseByDocker.("@header") );
+		    response<<responseByDocker
+			}
+		}
   }]
 
 
 	[ inspectImage( request )( response ){
-    inspectImage@DockerD( request )( responseByDocker );
-    response<<responseByDocker
+		scope( inspectImage )
+		{
+			install( serverError => println@Console("Internal server error")() );
+			install( noSuch => println@Console("No such image")() );
+			inspectImage@DockerD( request )( responseByDocker );
+			if( responseByDocker.("@header").statusCode == 500 )
+			{
+				throw( serverError )
+			}
+			else if( responseByDocker.("@header").statusCode == 404 )
+			{
+				throw( noSuch )
+			}
+			else
+			{
+				undef( responseByDocker.("@header") );
+				response<<responseByDocker
+			}
+		}
   }]
 
 
 	[ inspectNetwork( request )( response ){
-    inspectNetwork@DockerD( request )( responseByDocker );
-    response.result<<responseByDocker
+		scope( inspectNetwork )
+		{
+			install( noSuch => println@Console("Network not found")() );
+			inspectNetwork@DockerD( request )( responseByDocker );
+			if( responseByDocker.("@header").statusCode == 404 )
+			{
+				throw( noSuch )
+			}
+			else
+			{
+				undef( responseByDocker.("@header") );
+				response.result<<responseByDocker
+			}
+		}
   }]
 
 
 	[ inspectVolume( request )( response ){
+		install( serverError => println@Console("Internal server error")() );
+		install( noSuch => println@Console("No such volume")() );
     inspectVolume@DockerD( request )( responseByDocker );
-    response<<responseByDocker
+		if( responseByDocker.("@header").statusCode == 404 )
+		{
+			throw( noSuch )
+		}
+		else if( responseByDocker.("@header").statusCode == 500 )
+		{
+			throw( serverError )
+		}
+		else
+		{
+			undef( responseByDocker.("@header") );
+			response.result<<responseByDocker
+		}
   }]
 
 
 	[ killContainer( request )( response ){
-		if( !(is_defined( request.signal ))){
-      request.signal = "SIGKILL"
-    };
-		killContainer@DockerD( request )( responseByDocker );
-    response<<responseByDocker
+		scope( killContainer )
+		{
+			install( serverError => println@Console("Internal server error")() );
+			install( noSuch => println@Console("No such container")() );
+			if( !(is_defined( request.signal ))){
+	      request.signal = "SIGKILL"
+	    };
+			killContainer@DockerD( request )( responseByDocker );
+			if( responseByDocker.("@header").statusCode == 404 )
+			{
+				throw( noSuch )
+			}
+			else if( responseByDocker.("@header").statusCode == 500 )
+			{
+				throw( serverError )
+			}
+			else
+			{
+				undef( responseByDocker.("@header") );
+				response.result<<responseByDocker
+			}
+		}
 	}]
 
 
   [ listRunProcesses( request )( response ) {
-    if( !(is_defined( request.ps_args ))){
-      request.ps_args="-ef"
-    };
-    listRunProcesses@DockerD(  request  )(  responseByDocker  );
-    response.Titles<<responseByDocker.Titles;
-    response.Processes.row<<responseByDocker.Processes._
+		scope( listRunProcesses )
+		{
+			install( serverError => println@Console("Internal server error")() );
+			install( noSuch => println@Console("No such container")() );
+			if( !(is_defined( request.ps_args ))){
+	      request.ps_args="-ef"
+	    };
+	    listRunProcesses@DockerD(  request  )(  responseByDocker  );
+			if( responseByDocker.("@header").statusCode == 404 )
+			{
+				throw( noSuch )
+			}
+			else if( responseByDocker.("@header").statusCode == 500 )
+			{
+				throw( serverError )
+			}
+			else
+			{
+				undef( responseByDocker.("@header") );
+				response.Titles<<responseByDocker.Titles;
+		    response.Processes.row<<responseByDocker.Processes._
+			}
+		}
   }]
 
 
   [ logs( request )( response ){
-    if( !( is_defined( request.follow ))){
-      request.follow = false
-    };
-    if( !( is_defined( request.stderr ))){
-      request.stderr = false
-    };
-    if( !( is_defined( request.stdout ))){
-      request.stdout = false
-    };
-    if( !( is_defined( request.since ))){
-      request.since = 0
-    };
-    if( !( is_defined( request.timestamps ))){
-      request.timestamps = false
-    };
-    if( !( is_defined( request.tail ))){
-      request.tail = "all"
-    };
-    logs@DockerD( request )( responseByDocker );
-    response.log<<responseByDocker
+		scope( logs )
+		{
+			install( serverError => println@Console("Internal server error")() );
+			install( noSuch => println@Console("No such container")() );
+			if( !( is_defined( request.follow ))){
+	      request.follow = false
+	    };
+	    if( !( is_defined( request.stderr ))){
+	      request.stderr = false
+	    };
+	    if( !( is_defined( request.stdout ))){
+	      request.stdout = false
+	    };
+	    if( !( is_defined( request.since ))){
+	      request.since = 0
+	    };
+	    if( !( is_defined( request.timestamps ))){
+	      request.timestamps = false
+	    };
+	    if( !( is_defined( request.tail ))){
+	      request.tail = "all"
+	    };
+	    logs@DockerD( request )( responseByDocker );
+			if( responseByDocker.("@header").statusCode == 404 )
+			{
+				throw( noSuch )
+			}
+			else if( responseByDocker.("@header").statusCode == 500 )
+			{
+				throw( serverError )
+			}
+			else
+			{
+				undef( responseByDocker.("@header") );
+		    response.log<<responseByDocker
+			}
+		}
   }]
 
 
 	[ networks( request )( response ){
-    networks@DockerD( request )( responseByDocker );
-    response.network<<responseByDocker._
+		scope( networks )
+		{
+			install( serverError => println@Console("Internal server error")() );
+			networks@DockerD( request )( responseByDocker );
+			if( responseByDocker.("@header").statusCode == 500 )
+			{
+				throw( serverError )
+			}
+			else
+			{
+				undef( responseByDocker.("@header") );
+				response.network<<responseByDocker._
+			}
+		}
   }]
 
 
 	[ pauseContainer( request )( response ){
-		pauseContainer@DockerD( request )( responseByDocker );
-		response<<responseByDocker
+		scope( pauseContainer )
+		{
+			install( serverError => println@Console("Internal server error")() );
+			install( noSuch => println@Console("No such container")() );
+			pauseContainer@DockerD( request )( responseByDocker );
+			if( responseByDocker.("@header").statusCode == 404 )
+			{
+				throw( noSuch )
+			}
+			else if( responseByDocker.("@header").statusCode == 500 )
+			{
+				throw( serverError )
+			}
+			else
+			{
+				undef( responseByDocker.("@header") );
+				response<<responseByDocker
+			}
+		}
 	}]
 
 
 	[ removeContainer( request )( response ){
-		removeContainer@DockerD( request )( responseByDocker );
-    response<<responseByDocker
+		scope( removeContainer )
+		{
+			install( serverError => println@Console("Internal server error")() );
+			install( noSuch => println@Console("No such container")() );
+			install( badParam => println@Console("Bad parameter")() );
+			removeContainer@DockerD( request )( responseByDocker );
+			if( responseByDocker.("@header").statusCode == 404 )
+			{
+				throw( noSuch )
+			}
+			else if( responseByDocker.("@header").statusCode == 500 )
+			{
+				throw( serverError )
+			}
+			else if( responseByDocker.("@header").statusCode == 400 )
+			{
+				throw( badParam )
+			}
+			else
+			{
+				undef( responseByDocker.("@header") );
+				response<<responseByDocker
+			}
+		}
 	}]
 
 
   [ removeImage( request )( response ){
-    if( !(is_defined( request.force ))){
-      request.force = false
-    };
-    if( !(is_defined( request.noprune ))){
-      request.noprune = false
-    };
-    removeImage@DockerD( request )( responseByDocker );
-    response.info<<responseByDocker._
+		scope( removeImage )
+		{
+			install( serverError => println@Console("Internal server error")() );
+			install( noSuch => println@Console("No such container")() );
+			install( conflict => println@Console("Conflict")() );
+	    if( !(is_defined( request.force ))){
+	      request.force = false
+	    };
+	    if( !(is_defined( request.noprune ))){
+	      request.noprune = false
+	    };
+	    removeImage@DockerD( request )( responseByDocker );
+			if( responseByDocker.("@header").statusCode == 404 )
+			{
+				throw( noSuch )
+			}
+			else if( responseByDocker.("@header").statusCode == 500 )
+			{
+				throw( serverError )
+			}
+			else if( responseByDocker.("@header").statusCode == 409 )
+			{
+				throw( conflict )
+			}
+			else
+			{
+				undef( responseByDocker.("@header") );
+				response.info<<responseByDocker._
+			}
+		}
   }]
 
 
 	[ removeNetwork( request )( response ){
-		removeNetwork@DockerD( request )( responseByDocker );
-    response<<responseByDocker
+		scope( removeNetwork )
+		{
+			install( serverError => println@Console("Internal server error")() );
+			install( noSuch => println@Console("No such network")() );
+			removeNetwork@DockerD( request )( responseByDocker );
+			if( responseByDocker.("@header").statusCode == 404 )
+			{
+				throw( noSuch )
+			}
+			else if( responseByDocker.("@header").statusCode == 500 )
+			{
+				throw( serverError )
+			}
+			else
+			{
+				undef( responseByDocker.("@header") );
+				response<<responseByDocker
+			}
+		}
 	}]
 
 
 	[ removeVolume( request )( response ){
-		if( !(is_defined( request.force ))){
-      request.force = false
-    };
-		removeVolume@DockerD( request )( responseByDocker );
-    response<<responseByDocker
+		scope( removeVolume )
+		{
+			install( serverError => println@Console("Internal server error")() );
+			install( noSuch => println@Console("No such network")() );
+			install( inUse => println@Console("Volume is in use and cannot be removed")() );
+			if( !(is_defined( request.force ))){
+	      request.force = false
+	    };
+			removeVolume@DockerD( request )( responseByDocker );
+			if( responseByDocker.("@header").statusCode == 404 )
+			{
+				throw( noSuch )
+			}
+			else if( responseByDocker.("@header").statusCode == 500 )
+			{
+				throw( serverError )
+			}
+			else if( responseByDocker.("@header").statusCode == 409 )
+			{
+				throw( inUse )
+			}
+			else
+			{
+				undef( responseByDocker.("@header") );
+				response<<responseByDocker
+			}
+		}
 	}]
 
 
 	[ renameContainer( request )( response ){
-    renameContainer@DockerD( request )( responseByDocker );
-    response<<responseByDocker
+		scope( renameContainer )
+		{
+			install( serverError => println@Console("Internal server error")() );
+			install( noSuch => println@Console("No such container")() );
+			install( inUse => println@Console("Name already in use")() );
+			renameContainer@DockerD( request )( responseByDocker );
+			if( responseByDocker.("@header").statusCode == 404 )
+			{
+				throw( noSuch )
+			}
+			else if( responseByDocker.("@header").statusCode == 500 )
+			{
+				throw( serverError )
+			}
+			else if( responseByDocker.("@header").statusCode == 409 )
+			{
+				throw( inUse )
+			}
+			else
+			{
+				undef( responseByDocker.("@header") );
+				response<<responseByDocker
+			}
+		}
   }]
 
 
 	[ restartContainer( request )( response ){
-		restartContainer@DockerD( request )( responseByDocker );
-    response<<responseByDocker
+		scope( restartContainer )
+		{
+			install( serverError => println@Console("Internal server error")() );
+			install( noSuch => println@Console("No such network")() );
+			restartContainer@DockerD( request )( responseByDocker );
+			if( responseByDocker.("@header").statusCode == 404 )
+			{
+				throw( noSuch )
+			}
+			else if( responseByDocker.("@header").statusCode == 500 )
+			{
+				throw( serverError )
+			}
+			else
+			{
+				undef( responseByDocker.("@header") );
+				response<<responseByDocker
+			}
+		}
 	}]
 
 
 	[ startContainer( request )( response ){
-    startContainer@DockerD( request )( responseByDocker );
-		// println@Console("**** STATUS_CODE:"+responseByDocker.("@header").statusCode)();
-    response<<responseByDocker
+		scope( startContainer )
+		{
+			install( serverError => println@Console("Internal server error")() );
+			install( noSuch => println@Console("No such container")() );
+			install( alreadyStart => println@Console("Container already started")() );
+			startContainer@DockerD( request )( responseByDocker );
+			if( responseByDocker.("@header").statusCode == 500 ) {
+				throw( serverError )
+			}
+			else if( responseByDocker.("@header").statusCode == 304 ) {
+				throw( alreadyStart )
+			}
+			else if( responseByDocker.("@header").statusCode == 404 ) {
+				throw( noSuch )
+			}
+			else
+			{
+				undef( responseByDocker.("@header") );
+				response<<responseByDocker
+			}
+		}
   }]
 
 
   [ statsContainer( request )( response ){
-    if( !(is_defined( request.stream ))){
-      request.stream = false
-    };
-    statsContainer@DockerD( request )( responseByDocker );
-    response<<responseByDocker
+		scope( statsContainer )
+		{
+			install( serverError => println@Console("Internal server error")() );
+			install( noSuch => println@Console("No such container")() );
+			if( !(is_defined( request.stream ))){
+	      request.stream = false
+	    };
+	    statsContainer@DockerD( request )( responseByDocker );
+			if( responseByDocker.("@header").statusCode == 500 ) {
+				throw( serverError )
+			}
+			else if( responseByDocker.("@header").statusCode == 404 ) {
+				throw( noSuch )
+			}
+			else
+			{
+				undef( responseByDocker.("@header") );
+				response<<responseByDocker
+			}
+		}
   }]
 
 
 	[ stopContainer( request )( response ){
-    stopContainer@DockerD( request )( responseByDocker );
-    response<<responseByDocker
+		scope( stopContainer )
+		{
+			install( serverError => println@Console("Internal server error")() );
+			install( noSuch => println@Console("No such container")() );
+			install( alreadyStop => println@Console("Container already stopped")() );
+			stopContainer@DockerD( request )( responseByDocker );
+			if( responseByDocker.("@header").statusCode == 500 ) {
+				throw( serverError )
+			}
+			else if( responseByDocker.("@header").statusCode == 304 ) {
+				throw( alreadyStop )
+			}
+			else if( responseByDocker.("@header").statusCode == 404 ) {
+				throw( noSuch )
+			}
+			else
+			{
+				undef( responseByDocker.("@header") );
+				response<<responseByDocker
+			}
+		}
   }]
 
 
 	[ unpauseContainer( request )( response ){
-		unpauseContainer@DockerD( request )( responseByDocker );
-		response<<responseByDocker
+		scope( unpauseContainer )
+		{
+			install( serverError => println@Console("Internal server error")() );
+			install( noSuch => println@Console("No such container")() );
+			unpauseContainer@DockerD( request )( responseByDocker );
+			if( responseByDocker.("@header").statusCode == 500 ) {
+				throw( serverError )
+			}
+			else if( responseByDocker.("@header").statusCode == 404 ) {
+				throw( noSuch )
+			}
+			else
+			{
+				undef( responseByDocker.("@header") );
+				response<<responseByDocker
+			}
+		}
 	}]
 
 
   [ volumes( request )( response ){
-    volumes@DockerD( request )( responseByDocker );
-    response<<responseByDocker
+		scope( volumes )
+		{
+			install( serverError => println@Console("Internal server error")() );
+			volumes@DockerD( request )( responseByDocker );
+			if(responseByDocker.("@header").statusCode == 500)
+			{
+				throw( serverError )
+			}
+			else
+			{
+				undef( responseByDocker.("@header") );
+				response<<responseByDocker
+			}
+		}
   }]
 
 
 	[ waitContainer( request )( response ){
-    waitContainer@DockerD( request )( responseByDocker );
-    response<<responseByDocker
+		scope( waitContainer )
+		{
+			install( serverError => println@Console("Internal server error")() );
+			install( noSuch => println@Console("No such container")() );
+			waitContainer@DockerD( request )( responseByDocker );
+			if(responseByDocker.("@header").statusCode == 500)
+			{
+				throw( serverError )
+			}
+			else if(responseByDocker.("@header").statusCode == 404){
+				throw( noSuch )
+			}
+			else
+			{
+				undef( responseByDocker.("@header") );
+				response<<responseByDocker
+			}
+		}
   }]
 
 
