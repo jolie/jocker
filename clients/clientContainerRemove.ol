@@ -11,7 +11,7 @@ outputPort DockerIn {
 }
 
 main {
-	rq.id = "pppppp";
+	rq.id = "myFirstCtn3";
 	println@Console("***** REMOVE " +rq.id+ " CONTAINER *****")();
 	removeContainer@DockerIn(rq)(response);
 	valueToPrettyString@StringUtils( response )( s );
