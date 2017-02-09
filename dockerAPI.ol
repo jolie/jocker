@@ -13,7 +13,7 @@ inputPort DockerIn {
 outputPort DockerD {
   Location: "socket://192.168.99.100:2357"
   Protocol: http {
-		.response_header="@header";
+		.responseHeaders="@header";
     .debug=1;
     .debug.showContent=1;
     .format->format;
