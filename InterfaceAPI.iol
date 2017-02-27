@@ -126,72 +126,7 @@ type CreateContainerRequest: void {
   	.ExposedPorts?: undefined
   	.StopSignal?: string
   	.StopTimeout?: int
-  	.HostConfig?: void {
-    	.MaximumIOps?: int
-    	.MaximumIOBps?: int
-    	.BlkioWeight?: int
-    	.BlkioWeightDevice[0, *]: undefined
-    	.BlkioDeviceReadBps[0, *]: undefined
-    	.BlkioDeviceWriteBps[0, *]: undefined
-    	.BlkioDeviceReadIOps[0, *]: undefined
-    	.BlkioDeviceWriteIOps[0, *]: undefined
-    	.Binds?: undefined
-    	.ContainerIDFile?: string
-    	.CpusetCpus?: string
-    	.CpusetMems?: string
-    	.CpuPercent?: int
-	    .CpuShares?: int
-	    .CpuPeriod?: int
-	    .CpuQuota?: int
-	    .CpuCount?: int
-	    .CpuRealtimePeriod?: int
-	    .CpuRealtimeRuntime?: int
-	    .CapAdd?: undefined
-	    .CapDrop?: undefined
-	    .CgroupParent?: string
-	    .GroupAdd?: undefined
-	    .Devices[0, *]: undefined
-	    .DiskQuota?: int
-	    .DnsOptions[0, *]: undefined
-	    .Dns[0, *]: undefined
-	    .DnsSearch?: undefined
-	    .VolumesFrom?: undefined
-	    .IpcMode?: string
-	    .Isolation?: string
-	    .LxcConf[0, *]: undefined
-	    .Memory?: int
-	    .MemorySwappiness?: int
-	    .MemorySwap?: int
-	    .MemoryReservation?: int
-	    .KernelMemory?: int
-	    .OomKillDisable?: bool
-	    .OomScoreAdj?: int
-	    .NetworkMode?: string
-	    .NanoCpus?: int
-	    .PidMode?: string
-	    .PortBindings?: undefined
-	    .Privileged?: bool
-	    .PidsLimit?: int
-	    .ReadonlyRootfs?: bool
-	    .Runtime?: string
-	    .PublishAllPorts?: bool
-	    .RestartPolicy?: undefined
-	    .LogConfig[0, *]: undefined
-	    .Sysctls?: undefined
-	    .Ulimits[0, *]: undefined
-	    .VolumeDriver?: string
-	    .ShmSize?: int
-	    .UsernsMode?: string
-	    .ExtraHosts?: undefined
-	    .UTSMode?: string
-	    .Cgroup?: string
-	    .IOMaximumIOps?: int
-	    .IOMaximumBandwidth?: int
-	    .AutoRemove?: bool
-	    .ConsoleSize[0, *]: int
-	    .Links?: undefined
-	    .SecurityOpt?: undefined
-  	}
+  	.HostConfig?: HostConfig
   	.NetworkingConfig?: void {
     	.EndpointsConfig?: void {
       		.isolated_nw?: void {
