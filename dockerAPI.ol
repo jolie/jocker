@@ -234,7 +234,7 @@ main {
 				response.changes<<responseByDocker._
 			}
 		}
-  }]
+	}]
 
 
 	[ containers( request )( response ) {
