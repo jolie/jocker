@@ -17,7 +17,7 @@ outputPort DockerD {
     .debug=1;
     .debug.showContent=1;
     .format->format;
-		.contentType->contentType;
+    .contentType->contentType;
 		.statusCode->statusCode;
 		.osc.containers.alias = "containers/json";
     .osc.containers.method = "get";
