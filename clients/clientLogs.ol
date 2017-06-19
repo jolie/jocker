@@ -11,7 +11,10 @@ outputPort DockerIn {
 }
 
 main {
-	rq.id="jolie-ctn";
+	if ( #rgas == 0 ) {
+		 println@Console("Usage: jolie clientLogs container-id")()
+	};
+	rq.id=args[ 0 ];
 	rq.follow = true;
 	rq.stderr = true;
 	rq.stdout = true;
