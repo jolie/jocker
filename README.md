@@ -1,6 +1,12 @@
 # Jocker
 The Jolie Docker Orchestrator (work to commence soon).
 
+##Requirements
+In Linux environments it is necessary to install libmathhew libraries in order to enable communication between jocker and Docker on local unix sockets. In ubuntu, it is necessary to:
+- sudo apt get update
+- sudo apt-get install libunixsocket-java
+- cp /usr/lib/jni/libunix-java.so /usr/lib64/libmatthew-java/libunix-java.so
+
 ## Let's take a look..
 
 This Orchestrator allow us to contact docker API trought Jolie language:
@@ -17,7 +23,7 @@ Into this file are specified all possible data-types that define Request and Res
 Here we find the declaretion of all operations present in the Interface. Trought the output port we handle the comunication with Docker and inside each operation we have a response by docker that it will be translated and sended to the client.
 The output port describe, for each operation, alias, method and format of http calls, to recreate the original like POST,GET,DELETE... action/path_parameters?query_parameter in json format. There's also a fault handling that checks the status code given to us by docker to catch errors that occur during the execution.
 
-### Exemples - client directory
+### Examples - client directory
 
 Into this directory we found all client request to each created API docker. Inside each file .ol there's an example of a request that it's send to docker and ask to it to do an operation like create container, build images, remove volumes and much more.
 
