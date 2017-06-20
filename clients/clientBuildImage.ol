@@ -16,7 +16,8 @@ main {
 	file.format = "binary";
 	readFile@File(file)(rq.file);
 
-	rq.t = "first:latest";
+	rq.t = "prova:latest";
+	rq.dockerfile = "TestingBuild/Dockerfile";
 	println@Console("***** BUILD IMAGE *****")();
 	build@DockerIn(rq)(response);
 	valueToPrettyString@StringUtils( response )( s );
