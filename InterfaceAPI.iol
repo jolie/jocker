@@ -16,6 +16,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+type StandardFaultType: void {
+		.status: int
+		.message: string
+}
+
 type Bridge: void {
 	.Aliases?: undefined
 	.Links?: undefined
@@ -229,7 +234,7 @@ type BuildRequest: void {
   .file: raw
   .Content_type?: string
   .X_Registry_Config?: string     // This is a base64-encoded JSON object with auth configurations for multiple registries that a build may refer to
-  .dockerfile?: string               // Path within the build context to the Dockerfile. This is ignored if remote is specified and points to an external Dockerfile
+  .dockerfile?: string            // Path within the build context to the Dockerfile. This is ignored if remote is specified and points to an external Dockerfile
   .t?: string                     // A name and optional tag to apply to the image in the name:tag format. If you omit the tag the default latest value is assumed. You can provide several t parameters
   .remote?: string                // A Git repository URI or HTTP/HTTPS context URI
   .q?: bool                       // Suppress verbose build output
@@ -476,6 +481,15 @@ type ImagesResponse: void {
 		.Containers?: int
 	}
 }
+
+type ImageCreateRequest: void {
+		.fromImage: string
+		.fromSrc?: string
+		.repo?: string
+		.tag?: string
+}
+
+type ImageCreateResponse: void
 
 type ImageSearchRequest: void {
 	.term: string		// Term to search
@@ -872,7 +886,15 @@ interface InterfaceAPI {
     inspect( InspectRequest )( InspectResponse ),
     images( ImagesRequest )( ImagesResponse ),
     inspectImage( InspectImageRequest )( InspectImageResponse ),
-    imageHistory( ImageHistoryRequest )( ImageHistoryResponse ),
+
+		/* Create an image https://docs.docker.com/engine/api/v1.29/#operation/ImageCreate */
+		imageCreate( ImageCreateRequest )( ImageCreateResponse )
+			throws NoRepository( StandardFaultType ) ServerError( StandardFaultType ),
+
+		/* get the history of the image https://docs.docker.com/engine/api/v1.29/#operation/ImageHistory */
+    imageHistory( ImageHistoryRequest )( ImageHistoryResponse )
+			throws NoImage( StandardFaultType ) ServerError( StandardFaultType ),
+
     imageSearch( ImageSearchRequest )( ImageSearchResponse ),
     inspectNetwork( InspectNetworkRequest )( InspectNetworkResponse ),
     inspectVolume( InspectVolumeRequest )( InspectVolumeResponse ),

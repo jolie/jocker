@@ -32,113 +32,116 @@ inputPort DockerIn {
 outputPort DockerD {
   Protocol: http {
 		.responseHeaders="@header";
-    .debug=1;
-    .debug.showContent=1;
-    .format->format;
-    .contentType->contentType;
-    .statusCode->statusCode;
-    .osc.containers.alias = "containers/json";
-    .osc.containers.method = "get";
-    .osc.containers.method.queryFormat = "json";
-    .osc.inspect.alias = "containers/%!{id}/json";
-    .osc.inspect.method = "get";
-    .osc.inspect.method.queryFormat = "json";
-    .osc.listRunProcesses.alias = "containers/%!{id}/top";
-    .osc.listRunProcesses.method = "get";
-    .osc.listRunProcesses.method.queryFormat = "json";
-    .osc.logs.alias = "containers/%!{id}/logs";
-    .osc.logs.method = "get";
-    .osc.logs.method.queryFormat = "json";
-    .osc.images.alias = "images/json";
-    .osc.images.method = "get";
-    .osc.images.method.queryFormat = "json";
-    .osc.inspectImage.alias = "images/%!{name}/json";
-    .osc.inspectImage.method = "get";
-    .osc.inspectImage.method.queryFormat = "json";
-    .osc.imageHistory.alias = "images/%!{name}/history";
-    .osc.imageHistory.method = "get";
-    .osc.imageHistory.method.queryFormat = "json";
-    .osc.imageSearch.alias = "images/search";
-    .osc.imageSearch.method = "get";
-    .osc.imageSearch.method.queryFormat = "json";
-    .osc.removeImage.alias = "images/%!{name}?force=%!{force}&noprune=%!{noprune}";
-    .osc.removeImage.method = "delete";
-    .osc.removeImage.method.queryFormat = "json";
-    .osc.exportImage.alias = "images/%!{name}/get";
-    .osc.exportImage.method = "get";
-    .osc.exportImage.method.queryFormat = "json";
-    .osc.changesOnCtn.alias = "containers/%!{id}/changes";
-    .osc.changesOnCtn.method = "get";
-    .osc.changesOnCtn.method.queryFormat = "json";
-    .osc.exportContainer.alias = "containers/%!{id}/export";
-    .osc.exportContainer.method = "get";
-    .osc.exportContainer.method.queryFormat = "json";
-    .osc.statsContainer.alias = "containers/%!{id}/stats";
-    .osc.statsContainer.method = "get";
-    .osc.statsContainer.method.queryFormat = "json";
-    .osc.networks.alias = "networks";
-    .osc.networks.method = "get";
-    .osc.networks.method.queryFormat = "json";
-    .osc.inspectNetwork.alias = "networks/%!{id}";
-    .osc.inspectNetwork.method = "get";
-    .osc.inspectNetwork.method.queryFormat = "json";
-    .osc.volumes.alias = "volumes";
-    .osc.volumes.method = "get";
-    .osc.volumes.method.queryFormat = "json";
-    .osc.inspectVolume.alias = "volumes/%!{name}";
-    .osc.inspectVolume.method = "get";
-    .osc.inspectVolume.method.queryFormat = "json";
-    .osc.createContainer.alias = "containers/create?name=%!{name}";
-    .osc.createContainer.method = "post";
-    .osc.createContainer.method.queryFormat = "json";
-    .osc.startContainer.alias = "containers/%!{id}/start";
-    .osc.startContainer.method = "post";
-    .osc.startContainer.method.queryFormat = "json";
-    .osc.renameContainer.alias = "containers/%!{id}/rename?name=%!{name}";
-    .osc.renameContainer.method = "post";
-    .osc.renameContainer.method.queryFormat = "json";
-    .osc.stopContainer.alias = "containers/%!{id}/stop";
-    .osc.stopContainer.method = "post";
-    .osc.stopContainer.method.queryFormat = "json";
-    .osc.removeContainer.alias = "containers/%!{id}";
-    .osc.removeContainer.method = "delete";
-    .osc.removeContainer.method.queryFormat = "json";
-    .osc.restartContainer.alias = "containers/%!{id}/restart";
-    .osc.restartContainer.method = "post";
-    .osc.restartContainer.method.queryFormat = "json";
-    .osc.createVolume.alias = "volumes/create";
-    .osc.createVolume.method = "post";
-    .osc.createVolume.method.queryFormat = "json";
-    .osc.removeVolume.alias = "volumes/%!{name}?force=%!{force}";
-    .osc.removeVolume.method = "delete";
-    .osc.removeVolume.method.queryFormat = "json";
-    .osc.removeNetwork.alias = "networks/%!{id}";
-    .osc.removeNetwork.method = "delete";
-    .osc.removeNetwork.method.queryFormat = "json";
-    .osc.createNetwork.alias = "networks/create";
-    .osc.createNetwork.method = "post";
-    .osc.createNetwork.method.queryFormat = "json";
-    .osc.killContainer.alias = "containers/%!{id}/kill";
-    .osc.killContainer.method = "post";
-    .osc.killContainer.method.queryFormat = "json";
-    .osc.pauseContainer.alias = "containers/%!{id}/pause";
-    .osc.pauseContainer.method = "post";
-    .osc.pauseContainer.method.queryFormat = "json";
-    .osc.unpauseContainer.alias = "containers/%!{id}/unpause";
-    .osc.unpauseContainer.method = "post";
-    .osc.unpauseContainer.method.queryFormat = "json";
-    .osc.waitContainer.alias = "containers/%!{id}/wait";
-    .osc.waitContainer.method = "post";
-    .osc.waitContainer.method.queryFormat = "json";
-    .osc.deleteStopContainers.alias = "containers/prune";
-    .osc.deleteStopContainers.method = "post";
-    .osc.deleteStopContainers.method.queryFormat = "json";
-    .osc.createExec.alias = "containers/%!{id}/exec";
-    .osc.createExec.method = "post";
-    .osc.createExec.method.queryFormat = "json";
-    .osc.build.alias = "build?q=%!{q}&nocache=%!{nocache}&rm=%!{rm}&forcerm=%!{forcerm}&t=%!{t}&dockerfile=%!{dockerfile}";
-    .osc.build.method = "post";
-    .osc.build.method.queryFormat = "json"
+		.debug=1;
+		.debug.showContent=1;
+		.format->format;
+		.contentType->contentType;
+		.statusCode->statusCode;
+		.osc.containers.alias = "containers/json";
+		.osc.containers.method = "get";
+		.osc.containers.method.queryFormat = "json";
+		.osc.inspect.alias = "containers/%!{id}/json";
+		.osc.inspect.method = "get";
+		.osc.inspect.method.queryFormat = "json";
+		.osc.listRunProcesses.alias = "containers/%!{id}/top";
+		.osc.listRunProcesses.method = "get";
+		.osc.listRunProcesses.method.queryFormat = "json";
+		.osc.logs.alias = "containers/%!{id}/logs";
+		.osc.logs.method = "get";
+		.osc.logs.method.queryFormat = "json";
+		.osc.images.alias = "images/json";
+		.osc.images.method = "get";
+		.osc.images.method.queryFormat = "json";
+		.osc.imageCreate.alias = "images/create?fromImage=%!{fromImage}&fromSrc=%!{fromSrc}&repo=%!{repo}&tag=%!{tag}";
+		.osc.imageCreate.method = "post";
+		.osc.imageCreate.method.queryFormat = "json";
+		.osc.inspectImage.alias = "images/%!{name}/json";
+		.osc.inspectImage.method = "get";
+		.osc.inspectImage.method.queryFormat = "json";
+		.osc.imageHistory.alias = "images/%!{name}/history";
+		.osc.imageHistory.method = "get";
+		.osc.imageHistory.method.queryFormat = "json";
+		.osc.imageSearch.alias = "images/search";
+		.osc.imageSearch.method = "get";
+		.osc.imageSearch.method.queryFormat = "json";
+		.osc.removeImage.alias = "images/%!{name}?force=%!{force}&noprune=%!{noprune}";
+		.osc.removeImage.method = "delete";
+		.osc.removeImage.method.queryFormat = "json";
+		.osc.exportImage.alias = "images/%!{name}/get";
+		.osc.exportImage.method = "get";
+		.osc.exportImage.method.queryFormat = "json";
+		.osc.changesOnCtn.alias = "containers/%!{id}/changes";
+		.osc.changesOnCtn.method = "get";
+		.osc.changesOnCtn.method.queryFormat = "json";
+		.osc.exportContainer.alias = "containers/%!{id}/export";
+		.osc.exportContainer.method = "get";
+		.osc.exportContainer.method.queryFormat = "json";
+		.osc.statsContainer.alias = "containers/%!{id}/stats";
+		.osc.statsContainer.method = "get";
+		.osc.statsContainer.method.queryFormat = "json";
+		.osc.networks.alias = "networks";
+		.osc.networks.method = "get";
+		.osc.networks.method.queryFormat = "json";
+		.osc.inspectNetwork.alias = "networks/%!{id}";
+		.osc.inspectNetwork.method = "get";
+		.osc.inspectNetwork.method.queryFormat = "json";
+		.osc.volumes.alias = "volumes";
+		.osc.volumes.method = "get";
+		.osc.volumes.method.queryFormat = "json";
+		.osc.inspectVolume.alias = "volumes/%!{name}";
+		.osc.inspectVolume.method = "get";
+		.osc.inspectVolume.method.queryFormat = "json";
+		.osc.createContainer.alias = "containers/create?name=%!{name}";
+		.osc.createContainer.method = "post";
+		.osc.createContainer.method.queryFormat = "json";
+		.osc.startContainer.alias = "containers/%!{id}/start";
+		.osc.startContainer.method = "post";
+		.osc.startContainer.method.queryFormat = "json";
+		.osc.renameContainer.alias = "containers/%!{id}/rename?name=%!{name}";
+		.osc.renameContainer.method = "post";
+		.osc.renameContainer.method.queryFormat = "json";
+		.osc.stopContainer.alias = "containers/%!{id}/stop";
+		.osc.stopContainer.method = "post";
+		.osc.stopContainer.method.queryFormat = "json";
+		.osc.removeContainer.alias = "containers/%!{id}";
+		.osc.removeContainer.method = "delete";
+		.osc.removeContainer.method.queryFormat = "json";
+		.osc.restartContainer.alias = "containers/%!{id}/restart";
+		.osc.restartContainer.method = "post";
+		.osc.restartContainer.method.queryFormat = "json";
+		.osc.createVolume.alias = "volumes/create";
+		.osc.createVolume.method = "post";
+		.osc.createVolume.method.queryFormat = "json";
+		.osc.removeVolume.alias = "volumes/%!{name}?force=%!{force}";
+		.osc.removeVolume.method = "delete";
+		.osc.removeVolume.method.queryFormat = "json";
+		.osc.removeNetwork.alias = "networks/%!{id}";
+		.osc.removeNetwork.method = "delete";
+		.osc.removeNetwork.method.queryFormat = "json";
+		.osc.createNetwork.alias = "networks/create";
+		.osc.createNetwork.method = "post";
+		.osc.createNetwork.method.queryFormat = "json";
+		.osc.killContainer.alias = "containers/%!{id}/kill";
+		.osc.killContainer.method = "post";
+		.osc.killContainer.method.queryFormat = "json";
+		.osc.pauseContainer.alias = "containers/%!{id}/pause";
+		.osc.pauseContainer.method = "post";
+		.osc.pauseContainer.method.queryFormat = "json";
+		.osc.unpauseContainer.alias = "containers/%!{id}/unpause";
+		.osc.unpauseContainer.method = "post";
+		.osc.unpauseContainer.method.queryFormat = "json";
+		.osc.waitContainer.alias = "containers/%!{id}/wait";
+		.osc.waitContainer.method = "post";
+		.osc.waitContainer.method.queryFormat = "json";
+		.osc.deleteStopContainers.alias = "containers/prune";
+		.osc.deleteStopContainers.method = "post";
+		.osc.deleteStopContainers.method.queryFormat = "json";
+		.osc.createExec.alias = "containers/%!{id}/exec";
+		.osc.createExec.method = "post";
+		.osc.createExec.method.queryFormat = "json";
+		.osc.build.alias = "build?q=%!{q}&nocache=%!{nocache}&rm=%!{rm}&forcerm=%!{forcerm}&t=%!{t}&dockerfile=%!{dockerfile}";
+		.osc.build.method = "post";
+		.osc.build.method.queryFormat = "json"
   }
   RequestResponse:
 	build,
@@ -152,6 +155,7 @@ outputPort DockerD {
 	exportContainer,
 	exportImage,
 	images,
+	imageCreate,
 	imageHistory,
 	imageSearch,
 	inspect,
@@ -487,25 +491,43 @@ main {
 		}
   }]
 
+	[ imageCreate( request )( response ) {
+		scope( imageCreate ) {
+			install( serverError => println@Console("Internal server error")() );
+			install( NoRepository => println@Console("No repo")() );
+			imageCreate@DockerD( request )( responseByDocker );
+			if( responseByDocker.("@header").statusCode == 404 )
+			{
+				fault.status = 404;
+				fault.message = "Repository does not exist or no read access";
+				throw( NoRepository, fault )
+			}
+			else if( responseByDocker.("@header").statusCode == 500 )
+			{
+				fault.status = 500;
+				fault.message = "Server error";
+				throw( ServerError )
+			}
+		}
+	}]
 
 	[ imageHistory( request )( response ){
 		scope( imageHistory )
 		{
-			install( serverError => println@Console("Internal server error")() );
-			install( noSuch => println@Console("No such image")() );
+			install( ServerError => println@Console("Internal server error")() );
+			install( NoImage => println@Console("No such image")() );
 			imageHistory@DockerD( request )( responseByDocker );
 			if( responseByDocker.("@header").statusCode == 404 )
 			{
-				throw( noSuch )
+					fault.status = 404;
+					fault.message = "No such image";
+					throw( NoImage )
 			}
 			else if( responseByDocker.("@header").statusCode == 500 )
 			{
-				throw( serverError )
-			}
-			else
-			{
-				undef( responseByDocker.("@header") );
-				response.histories<<responseByDocker._
+					fault.status = 500;
+					fault.message = "Server error";
+					throw( ServerError )
 			}
 		}
   }]
