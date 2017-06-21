@@ -16,6 +16,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+type StandardFaultType: void {
+		.status: int
+		.message: string
+}
+
 type Bridge: void {
 	.Aliases?: undefined
 	.Links?: undefined
@@ -229,7 +234,7 @@ type BuildRequest: void {
   .file: raw
   .Content_type?: string
   .X_Registry_Config?: string     // This is a base64-encoded JSON object with auth configurations for multiple registries that a build may refer to
-  .dockerfile?: string               // Path within the build context to the Dockerfile. This is ignored if remote is specified and points to an external Dockerfile
+  .dockerfile?: string            // Path within the build context to the Dockerfile. This is ignored if remote is specified and points to an external Dockerfile
   .t?: string                     // A name and optional tag to apply to the image in the name:tag format. If you omit the tag the default latest value is assumed. You can provide several t parameters
   .remote?: string                // A Git repository URI or HTTP/HTTPS context URI
   .q?: bool                       // Suppress verbose build output
@@ -477,6 +482,15 @@ type ImagesResponse: void {
 	}
 }
 
+type ImageCreateRequest: void {
+		.fromImage: string
+		.fromSrc?: string
+		.repo?: string
+		.tag?: string
+}
+
+type ImageCreateResponse: void
+
 type ImageSearchRequest: void {
 	.term: string		// Term to search
 	.limit?: int 		// Maximum number of results to return
@@ -496,6 +510,40 @@ type ImageSearchResponse: void {
 		.star_count?: int
 	}
 }
+
+
+type InspectContainerRequest: void {
+  	.size?: bool        //< Return container size information.
+  	.id: string  		//< ID or name of the container
+}
+
+type InspectContainerResponse: void {
+	.AppArmorProfile?: string
+	.Args[0, *]: string
+	.Config?: Config
+	.Created?: string
+	.Driver?: string
+	.HostConfig?: HostConfig
+	.HostnamePath?: string
+	.HostsPath?: string
+	.LogPath?: string
+	.Id?: string
+	.Image?: string
+	.GraphDriver?: undefined
+	.MountLabel?: string
+	.Name?: string
+	.NetworkSettings?: NetworkSettings
+	.Path?: string
+	.ProcessLabel?: string
+	.ResolvConfPath?: string
+	.RestartCount?: int
+	.State?: State
+	.Mounts[0, *]: Mount
+	.ExecIDs?: undefined
+  .SizeRootFs?: int
+  .SizeRw?: int
+}
+
 
 type InspectImageRequest: void {
 	.name: string		// Image name or id
@@ -530,38 +578,6 @@ type InspectNetworkRequest: void {
 
 type InspectNetworkResponse: void {
 	.result: NetworkType
-}
-
-type InspectRequest: void {
-  	.size?: bool        //< Return container size information.
-  	.id: string  		//< ID or name of the container
-}
-
-type InspectResponse: void {
-	.AppArmorProfile?: string
-	.Args[0, *]: string
-	.Config?: Config
-	.Created?: string
-	.Driver?: string
-	.HostConfig?: HostConfig
-	.HostnamePath?: string
-	.HostsPath?: string
-	.LogPath?: string
-	.Id?: string
-	.Image?: string
-	.GraphDriver?: undefined
-	.MountLabel?: string
-	.Name?: string
-	.NetworkSettings?: NetworkSettings
-	.Path?: string
-	.ProcessLabel?: string
-	.ResolvConfPath?: string
-	.RestartCount?: int
-	.State?: State
-	.Mounts[0, *]: Mount
-	.ExecIDs?: undefined
-  .SizeRootFs?: int
-  .SizeRw?: int
 }
 
 type InspectVolumeRequest: void {
@@ -859,38 +875,142 @@ type WaitContainerResponse: void {
 
 interface InterfaceAPI {
   RequestResponse:
-    build( BuildRequest )( BuildResponse ),
-    changesOnCtn( ChangesRequest )( ChangesResponse ),
-  	containers( ContainersRequest )( ContainersResponse ),
-    createContainer( CreateContainerRequest )( CreateContainerResponse ),
-    createExec( CreateExecRequest )( CreateExecResponse ),
-    createNetwork( CreateNetworkRequest )( CreateNetworkResponse ),
-    createVolume( CreateVolumeRequest )( CreateVolumeResponse ),
-    deleteStopContainers( DeleteStopContainersRequest )( DeleteStopContainersResponse ),
-    exportContainer( ExportContainerRequest )( undefined ),
-    exportImage( ExportImageRequest )( ExportImageResponse ),
-    inspect( InspectRequest )( InspectResponse ),
-    images( ImagesRequest )( ImagesResponse ),
-    inspectImage( InspectImageRequest )( InspectImageResponse ),
-    imageHistory( ImageHistoryRequest )( ImageHistoryResponse ),
-    imageSearch( ImageSearchRequest )( ImageSearchResponse ),
-    inspectNetwork( InspectNetworkRequest )( InspectNetworkResponse ),
-    inspectVolume( InspectVolumeRequest )( InspectVolumeResponse ),
-    killContainer( KillContainerRequest )( KillContainerResponse ),
-    listRunProcesses( ListRunProcessesRequest )( ListRunProcessesResponse ),
-    logs( LogsRequest )( LogsResponse ),
-    networks( NetworksRequest )( NetworksResponse ),
-    pauseContainer( PauseContainerRequest )( PauseContainerResponse ),
-    removeContainer( RemoveContainerRequest )( RemoveContainerResponse ),
-    removeImage( RemoveImageRequest )( RemoveImageResponse ),
-    removeNetwork( RemoveNetworkRequest )( RemoveNetworkResponse ),
-    removeVolume( RemoveVolumeRequest )( RemoveVolumeResponse ),
-    renameContainer( RenameContainerRequest )( RenameContainerResponse ),
-    restartContainer( RestartContainerRequest )( RestartContainerResponse ),
-    startContainer( StartContainerRequest )( StartContainerResponse ),
-    statsContainer( StatsContainerRequest )( StatsContainerResponse ),
-    stopContainer( StopContainerRequest )( StopContainerResponse ),
-    unpauseContainer( UnpauseContainerRequest )( UnpauseContainerResponse ),
-    volumes( VolumesRequest )( VolumesResponse ),
-    waitContainer( WaitContainerRequest )( WaitContainerResponse )
+	  /* build an image starting from a file https://docs.docker.com/engine/api/v1.29/#operation/ImageBuild */
+    build( BuildRequest )( BuildResponse )
+			throws BadParam( StandardFaultType ) ServerError( StandardFaultType ),
+
+		/* get changes on a container https://docs.docker.com/engine/api/v1.29/#operation/ContainerChanges */
+    changesOnCtn( ChangesRequest )( ChangesResponse )
+			throws NoSuchContainer( StandardFaultType ) ServerError( StandardFaultType ),
+
+		/* List containers https://docs.docker.com/engine/api/v1.29/#operation/ContainerList */
+  	containers( ContainersRequest )( ContainersResponse )
+			throws BadParam( StandardFaultType ) ServerError( StandardFaultType ),
+
+		/* Create a container https://docs.docker.com/engine/api/v1.29/#operation/ContainerCreate */
+    createContainer( CreateContainerRequest )( CreateContainerResponse )
+			throws BadParam( StandardFaultType ) ServerError( StandardFaultType ) NoSuchContainer( StandardFaultType ) NoAttachment( StandardFaultType ) Conflict( StandardFaultType ),
+
+		/* Create an exec instance https://docs.docker.com/engine/api/v1.29/#operation/ContainerExec */
+		createExec( CreateExecRequest )( CreateExecResponse )
+			throws NoSuchContainer( StandardFaultType ) ServerError( StandardFaultType ) ContainerPaused( StandardFaultType ),
+
+		/* Create a network https://docs.docker.com/engine/api/v1.29/#operation/NetworkCreate */
+    createNetwork( CreateNetworkRequest )( CreateNetworkResponse )
+			throws PluginNotFound( StandardFaultType ) ServerError( StandardFaultType ) OperationNotSupported( StandardFaultType ),
+
+		/* Create a volume https://docs.docker.com/engine/api/v1.29/#operation/VolumeCreate */
+		createVolume( CreateVolumeRequest )( CreateVolumeResponse )
+			throws ServerError( StandardFaultType ),
+
+		/* delete stopped containers https://docs.docker.com/engine/api/v1.29/#operation/ContainerPrune */
+    deleteStoppedContainers( DeleteStopContainersRequest )( DeleteStopContainersResponse )
+			throws ServerError( StandardFaultType ),
+
+		/* export a container https://docs.docker.com/engine/api/v1.29/#operation/ContainerExport */
+    exportContainer( ExportContainerRequest )( undefined )
+			throws NoSuchContainer( StandardFaultType ) ServerError( StandardFaultType ),
+
+		/* export image https://docs.docker.com/engine/api/v1.29/#operation/ContainerExport */
+    exportImage( ExportImageRequest )( ExportImageResponse )
+			throws ServerError( StandardFaultType ),
+
+		/* List all images https://docs.docker.com/engine/api/v1.29/#operation/ImageList */
+		images( ImagesRequest )( ImagesResponse )
+			throws ServerError( StandardFaultType ) NoRepository( StandardFaultType ),
+
+		/* Create an image https://docs.docker.com/engine/api/v1.29/#operation/ImageCreate */
+		imageCreate( ImageCreateRequest )( ImageCreateResponse )
+			throws NoRepository( StandardFaultType ) ServerError( StandardFaultType ),
+
+		/* get the history of the image https://docs.docker.com/engine/api/v1.29/#operation/ImageHistory */
+		imageHistory( ImageHistoryRequest )( ImageHistoryResponse )
+			throws NoImage( StandardFaultType ) ServerError( StandardFaultType ),
+
+		/* Search images https://docs.docker.com/engine/api/v1.29/#operation/ImageSearch */
+		imageSearch( ImageSearchRequest )( ImageSearchResponse )
+			throws ServerError( StandardFaultType ),
+
+		/* Inspect a container https://docs.docker.com/engine/api/v1.29/#operation/ImageInspect*/
+		inspectContainer( InspectContainerRequest )( InspectContainerResponse )
+			throws ServerError( StandardFaultType ) NoSuchContainer( StandardFaultType ),
+
+		/* Inspect an image https://docs.docker.com/engine/api/v1.29/#operation/ImageInspect */
+		inspectImage( InspectImageRequest )( InspectImageResponse )
+			throws ServerError( StandardFaultType ) NoSuchImage( StandardFaultType ),
+
+		/* inspect a network https://docs.docker.com/engine/api/v1.29/#operation/NetworkInspect */
+		inspectNetwork( InspectNetworkRequest )( InspectNetworkResponse )
+			throws NoSuchNetwork( StandardFaultType ),
+
+		/* inspect a volume https://docs.docker.com/engine/api/v1.29/#operation/VolumeInspect */
+		inspectVolume( InspectVolumeRequest )( InspectVolumeResponse )
+			throws ServerError( StandardFaultType ) NoSuchVolume( StandardFaultType ),
+
+		/* Kill a container https://docs.docker.com/engine/api/v1.29/#operation/ContainerKill */
+		killContainer( KillContainerRequest )( KillContainerResponse )
+			throws NoSuchContainer( StandardFaultType ) ServerError( StandardFaultType ),
+
+		/* List processes inside a container https://docs.docker.com/engine/api/v1.29/#operation/ContainerTop */
+		listRunProcesses( ListRunProcessesRequest )( ListRunProcessesResponse )
+			throws NoSuchContainer( StandardFaultType ) ServerError( StandardFaultType ),
+
+		/* Get container logs https://docs.docker.com/engine/api/v1.29/#operation/ContainerLogs */
+		logs( LogsRequest )( LogsResponse ),
+
+		/* List netowrks https://docs.docker.com/engine/api/v1.29/#operation/NetworkList */
+		networks( NetworksRequest )( NetworksResponse )
+			throws ServerError( StandardFaultType ),
+
+		/* Pause a container https://docs.docker.com/engine/api/v1.29/#operation/ContainerPaused */
+		pauseContainer( PauseContainerRequest )( PauseContainerResponse )
+			throws NoSuchContainer( StandardFaultType ) ServerError( StandardFaultType ),
+
+		/* Remove a container https://docs.docker.com/engine/api/v1.29/#operation/ContainerDelete */
+		removeContainer( RemoveContainerRequest )( RemoveContainerResponse )
+			throws NoSuchContainer( StandardFaultType ) ServerError( StandardFaultType ) BadParam( StandardFaultType ),
+
+		/* 	Remove an image https://docs.docker.com/engine/api/v1.29/#operation/ImageDelete */
+		removeImage( RemoveImageRequest )( RemoveImageResponse )
+			throws NoSuchImage( StandardFaultType ) ServerError( StandardFaultType ) Conflict( StandardFaultType ),
+
+		/* Remove a network https://docs.docker.com/engine/api/v1.29/#operation/NetworkDelete */
+		removeNetwork( RemoveNetworkRequest )( RemoveNetworkResponse )
+			throws Conflict( StandardFaultType ) ServerError( StandardFaultType ),
+
+		/* Remove a volume https://docs.docker.com/engine/api/v1.29/#operation/VolumeDelete */
+		removeVolume( RemoveVolumeRequest )( RemoveVolumeResponse )
+			throws NoSuchVolume( StandardFaultType ) VolumeInUse( StandardFaultType ) ServerError( StandardFaultType ),
+
+		/* Rename a container https://docs.docker.com/engine/api/v1.29/#operation/ContainerRename */
+		renameContainer( RenameContainerRequest )( RenameContainerResponse )
+			throws NoSuchContainer( StandardFaultType ) ServerError( StandardFaultType ) ContainerInUse( StandardFaultType ),
+
+		/* Restart a container https://docs.docker.com/engine/api/v1.29/#operation/ContainerRestart */
+		restartContainer( RestartContainerRequest )( RestartContainerResponse )
+			throws NoSuchContainer( StandardFaultType ) ServerError( StandardFaultType ),
+
+		/* Start a container https://docs.docker.com/engine/api/v1.29/#operation/ContainerRestart*/
+		startContainer( StartContainerRequest )( StartContainerResponse )
+			throws NoSuchContainer( StandardFaultType ) ServerError( StandardFaultType ) AlreadyStarted( StandardFaultType ),
+
+		/* container stats based on resource usage https://docs.docker.com/engine/api/v1.29/#operation/ContainerStats */
+		statsContainer( StatsContainerRequest )( StatsContainerResponse )
+			throws NoSuchContainer( StandardFaultType ) ServerError( StandardFaultType ),
+
+		/* stop a container https://docs.docker.com/engine/api/v1.29/#operation/ContainerStop */
+		stopContainer( StopContainerRequest )( StopContainerResponse )
+			throws NoSuchContainer( StandardFaultType ) ServerError( StandardFaultType ) AlreadyStopped( StandardFaultType ),
+
+		/* Unpause a container https://docs.docker.com/engine/api/v1.29/#operation/ContainerUnpause */
+		unpauseContainer( UnpauseContainerRequest )( UnpauseContainerResponse )
+			throws NoSuchContainer( StandardFaultType ) ServerError( StandardFaultType ),
+
+		/* List volumes https://docs.docker.com/engine/api/v1.29/#operation/VolumeList */
+		volumes( VolumesRequest )( VolumesResponse )
+			throws ServerError( StandardFaultType ),
+
+		/* Wait for a container https://docs.docker.com/engine/api/v1.29/#operation/ContainerWait */
+		waitContainer( WaitContainerRequest )( WaitContainerResponse )
+			throws NoSuchContainer( StandardFaultType ) ServerError( StandardFaultType )
 }
