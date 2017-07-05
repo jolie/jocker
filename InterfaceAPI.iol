@@ -210,6 +210,7 @@ type NetworkType: void {
 type Port: void {
 	.PrivatePort?: int
 	.PublicPort?: int
+	.IP?: string
 	.Type?: string
 }
 
