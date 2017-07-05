@@ -153,6 +153,7 @@ type Mount: void {
 	.Mode?: string
 	.RW?: bool
 	.Propagation?: string
+	.Type?:string
 }
 
 type Networks: void {
