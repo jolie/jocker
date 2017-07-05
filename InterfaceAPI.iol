@@ -231,29 +231,29 @@ type State: void {
 /* MESSAGES */
 
 type BuildRequest: void {
-  .file: raw
-  .Content_type?: string
-  .X_Registry_Config?: string     // This is a base64-encoded JSON object with auth configurations for multiple registries that a build may refer to
-  .dockerfile?: string            // Path within the build context to the Dockerfile. This is ignored if remote is specified and points to an external Dockerfile
-  .t?: string                     // A name and optional tag to apply to the image in the name:tag format. If you omit the tag the default latest value is assumed. You can provide several t parameters
-  .remote?: string                // A Git repository URI or HTTP/HTTPS context URI
-  .q?: bool                       // Suppress verbose build output
-  .nocache?: bool                 // Do not use the cache when building the image
-  .cachefrom?: string             // JSON array of images used for build cache resolution
-  .pull?: string                  // Attempt to pull the image even if an older image exists locally
-  .rm?: bool                      // Remove intermediate containers after a successful build
-  .forcerm?: bool                 // Always remove intermediate containers, even upon failure
-  .memory?: int
-  .memswap?: int                  // Set as -1 to disable swap
-  .cpushares?: int
-  .cpusetcpus?: string
-  .cpuperiod?: int
-  .cpuquota?: int
-  .buildargs?: int                // JSON map of string pairs for build-time variables. Users pass these values at build-time
-  .shmsize?: int
-  .squash?: bool
-  .labels?: string
-  .networkmode?: string           // Sets the networking mode for the run commands during build. Supported standard values are: bridge, host, none, and container:<name|id>. Any other value is taken as a custom network's name to which this container should connect to
+	.file: raw
+	.Content_type?: string
+	.X_Registry_Config?: string     // This is a base64-encoded JSON object with auth configurations for multiple registries that a build may refer to
+	.dockerfile?: string            // Path within the build context to the Dockerfile. This is ignored if remote is specified and points to an external Dockerfile
+	.t?: string                     // A name and optional tag to apply to the image in the name:tag format. If you omit the tag the default latest value is assumed. You can provide several t parameters
+	.remote?: string                // A Git repository URI or HTTP/HTTPS context URI
+	.q?: bool                       // Suppress verbose build output
+	.nocache?: bool                 // Do not use the cache when building the image
+	.cachefrom?: string             // JSON array of images used for build cache resolution
+	.pull?: string                  // Attempt to pull the image even if an older image exists locally
+	.rm?: bool                      // Remove intermediate containers after a successful build
+	.forcerm?: bool                 // Always remove intermediate containers, even upon failure
+	.memory?: int
+	.memswap?: int                  // Set as -1 to disable swap
+	.cpushares?: int
+	.cpusetcpus?: string
+	.cpuperiod?: int
+	.cpuquota?: int
+	.buildargs?: int                // JSON map of string pairs for build-time variables. Users pass these values at build-time
+	.shmsize?: int
+	.squash?: bool
+	.labels?: string
+	.networkmode?: string           // Sets the networking mode for the run commands during build. Supported standard values are: bridge, host, none, and container:<name|id>. Any other value is taken as a custom network's name to which this container should connect to
 }
 
 type BuildResponse: void {
@@ -272,24 +272,24 @@ type ChangesResponse: void {
 }
 
 type ContainersRequest: void {
-  	.all?: bool          //< Show all containers. Only running containers are shown by default
-	  .limit?: int        //< Show limit last created containers, include non-running ones.
-  	.size?: bool        //< Show the containers sizes
-  	.filters?: string {
-  		.exited?: int
-  		.status?: string
-  		.label?: undefined
-  		.isolation?: string
-  		.id?: string
-  		.name?: string
-  		.is_task?: bool
-  		.ancestor?: string
-  		.before?: string
-  		.since?: string
-  		.volume?: string
-  		.network?: string
-  		.health?: string
-  	}
+	.all?: bool          //< Show all containers. Only running containers are shown by default
+	.limit?: int        //< Show limit last created containers, include non-running ones.
+	.size?: bool        //< Show the containers sizes
+	.filters?: string {
+		.exited?: int
+		.status?: string
+		.label?: undefined
+		.isolation?: string
+		.id?: string
+		.name?: string
+		.is_task?: bool
+		.ancestor?: string
+		.before?: string
+		.since?: string
+		.volume?: string
+		.network?: string
+		.health?: string
+	}
 }
 
 type ContainersResponse: void{
@@ -314,42 +314,42 @@ type ContainersResponse: void{
 }
 
 type CreateContainerRequest: void {
-	  .name?: string		// Assign the specified name to the container. Must match /?[a-zA-Z0-9_-]+
-  	.Hostname?: string
-  	.Domainname?: string
-  	.User?: string
-  	.AttachStdin?: bool
-  	.AttachStdout?: bool
-  	.AttachStderr?: bool
-  	.Tty?: bool
-  	.OpenStdin?: bool
-  	.StdinOnce?: bool
-  	.Env[0, *]: string
-  	.Cmd[0, *]: string
-  	.Entrypoint[0, *]: string
-  	.Image?: string
-  	.Labels?: undefined
-  	.Volumes?: undefined
-  	.WorkingDir?: string
-  	.NetworkDisabled?: bool
-  	.MacAddress?: string
-  	.ExposedPorts?: undefined
-  	.StopSignal?: string
-  	.StopTimeout?: int
-  	.HostConfig?: HostConfig
-  	.NetworkingConfig?: void {
-    	.EndpointsConfig?: void {
-      		.isolated_nw?: void {
-        		.IPAMConfig?: void {
-          			.IPv4Address?: string
-          			.IPv6Address?: string
-          			.LinkLocalIPs[0, *]: string
-        		}
-        		.Links[0, *]: string
-        		.Aliases[0, *]: string
-      		}
-    	}
-  	}
+	.name?: string		// Assign the specified name to the container. Must match /?[a-zA-Z0-9_-]+
+	.Hostname?: string
+	.Domainname?: string
+	.User?: string
+	.AttachStdin?: bool
+	.AttachStdout?: bool
+	.AttachStderr?: bool
+	.Tty?: bool
+	.OpenStdin?: bool
+	.StdinOnce?: bool
+	.Env[0, *]: string
+	.Cmd[0, *]: string
+	.Entrypoint[0, *]: string
+	.Image?: string
+	.Labels?: undefined
+	.Volumes?: undefined
+	.WorkingDir?: string
+	.NetworkDisabled?: bool
+	.MacAddress?: string
+	.ExposedPorts?: undefined
+	.StopSignal?: string
+	.StopTimeout?: int
+	.HostConfig?: HostConfig
+	.NetworkingConfig?: void {
+		.EndpointsConfig?: void {
+			.isolated_nw?: void {
+				.IPAMConfig?: void {
+						.IPv4Address?: string
+						.IPv6Address?: string
+						.LinkLocalIPs[0, *]: string
+				}
+				.Links[0, *]: string
+				.Aliases[0, *]: string
+			}
+		}
+	}
 }
 
 type CreateContainerResponse: void {
@@ -358,29 +358,29 @@ type CreateContainerResponse: void {
 }
 
 type CreateExecRequest: void {
-  .id: string            // Container name or ID
-  .AttachStdin?: bool
-  .AttachStdout?: bool
-  .AttachStderr?: bool
-  .DetachKeys?: string
-  .Tty?: bool
-  .Cmd[0, *]: string
-  .Env[0, *]: string
-  .Privileged?: bool    // Runs the exec process with extended privileges
-  .User?: string        // The user, and optionally, group to run the exec process inside the container. Format is one of: user, user:group, uid, or uid:gid
+	.id: string            // Container name or ID
+	.AttachStdin?: bool
+	.AttachStdout?: bool
+	.AttachStderr?: bool
+	.DetachKeys?: string
+	.Tty?: bool
+	.Cmd[0, *]: string
+	.Env[0, *]: string
+	.Privileged?: bool    // Runs the exec process with extended privileges
+	.User?: string        // The user, and optionally, group to run the exec process inside the container. Format is one of: user, user:group, uid, or uid:gid
 }
 
 type CreateExecResponse: void {
-  .Id: string
-  .message?: string
+	.Id: string
+	.message?: string
 }
 
 type CreateNetworkRequest: void {
-  .Name: string
-  .CheckDuplicate?: bool
-  .Driver?: string
-  .Internal?: bool
-  .IPAM?: void {
+	.Name: string
+	.CheckDuplicate?: bool
+	.Driver?: string
+	.Internal?: bool
+	.IPAM?: void {
 		.Driver?: string
 		.Config[0, *]: void {
 			.Subnet?: string
@@ -388,35 +388,35 @@ type CreateNetworkRequest: void {
 		}
 		.Options?: undefined
 	}
-  .EnableIPv6?: bool
-  .Options?: undefined
-  .Labels?: undefined
+	.EnableIPv6?: bool
+	.Options?: undefined
+	.Labels?: undefined
 }
 
 type CreateNetworkResponse: void {
-  .Id?: string
-  .Warning?: string
+	.Id?: string
+	.Warning?: string
 }
 
 type CreateVolumeRequest: void {
-  .Name?: string        // Volume name or ID
-  .Driver?: string
-  .DriverOpts[0, *]: string
-  .Labels?: undefined
+	.Name?: string        // Volume name or ID
+	.Driver?: string
+	.DriverOpts[0, *]: string
+	.Labels?: undefined
 }
 
 type CreateVolumeResponse: void {
-  .Name: string
-  .Driver: string
-  .Mountpoint: string
-  .Status?: undefined
-  .Labels: undefined
-  .Scope: string
-  .Options: undefined
-  .UsageData?: void {
-    .Size: int
-    .RefCount: int
-  }
+	.Name: string
+	.Driver: string
+	.Mountpoint: string
+	.Status?: undefined
+	.Labels: undefined
+	.Scope: string
+	.Options: undefined
+	.UsageData?: void {
+		.Size: int
+		.RefCount: int
+	}
 }
 
 type DeleteStopContainersRequest: void {
@@ -540,8 +540,8 @@ type InspectContainerResponse: void {
 	.State?: State
 	.Mounts[0, *]: Mount
 	.ExecIDs?: undefined
-  .SizeRootFs?: int
-  .SizeRw?: int
+	.SizeRootFs?: int
+	.SizeRw?: int
 }
 
 
@@ -599,8 +599,8 @@ type InspectVolumeResponse: void {
 }
 
 type KillContainerRequest: void {
-  .id: string       // Container name or ID
-  .signal?: string  // Signal to send to the container as an integer or string (e.g. SIGINT)
+	.id: string       // Container name or ID
+	.signal?: string  // Signal to send to the container as an integer or string (e.g. SIGINT)
 }
 
 type KillContainerResponse: void {
@@ -620,13 +620,13 @@ type ListRunProcessesResponse: void {
 }
 
 type LogsRequest: void {
-  	.id: string			//< ID or name of the container
-  	.follow?: bool  	// return stream
-  	.stdout?: bool		// show stdout log
-  	.stderr?: bool		// show stderr log
-  	.since?:	int		// Specifying a timestamp will only output log-entries since that timestamp
-  	.timestamps?: bool	// print timestamps for every log line
-  	.tail?: string		// Only return this number of log lines from the end of the logs. Specify as an integer or all to output all log lines
+	.id: string			//< ID or name of the container
+	.follow?: bool  	// return stream
+	.stdout?: bool		// show stdout log
+	.stderr?: bool		// show stderr log
+	.since?:	int		// Specifying a timestamp will only output log-entries since that timestamp
+	.timestamps?: bool	// print timestamps for every log line
+	.tail?: string		// Only return this number of log lines from the end of the logs. Specify as an integer or all to output all log lines
 }
 
 type LogsResponse: void {
@@ -648,11 +648,11 @@ type NetworksResponse: void {
 }
 
 type PauseContainerRequest: void {
-  .id: string       // Container name or ID
+	.id: string       // Container name or ID
 }
 
 type PauseContainerResponse: void {
-  .message?: string
+	.message?: string
 }
 
 type RemoveImageRequest: void {
@@ -875,142 +875,142 @@ type WaitContainerResponse: void {
 
 interface InterfaceAPI {
   RequestResponse:
-	  /* build an image starting from a file https://docs.docker.com/engine/api/v1.29/#operation/ImageBuild */
-    build( BuildRequest )( BuildResponse )
-			throws BadParam( StandardFaultType ) ServerError( StandardFaultType ),
+	/* build an image starting from a file https://docs.docker.com/engine/api/v1.29/#operation/ImageBuild */
+	build( BuildRequest )( BuildResponse )
+		throws BadParam( StandardFaultType ) ServerError( StandardFaultType ),
 
-		/* get changes on a container https://docs.docker.com/engine/api/v1.29/#operation/ContainerChanges */
-    changesOnCtn( ChangesRequest )( ChangesResponse )
-			throws NoSuchContainer( StandardFaultType ) ServerError( StandardFaultType ),
+	/* get changes on a container https://docs.docker.com/engine/api/v1.29/#operation/ContainerChanges */
+	changesOnCtn( ChangesRequest )( ChangesResponse )
+		throws NoSuchContainer( StandardFaultType ) ServerError( StandardFaultType ),
 
-		/* List containers https://docs.docker.com/engine/api/v1.29/#operation/ContainerList */
-  	containers( ContainersRequest )( ContainersResponse )
-			throws BadParam( StandardFaultType ) ServerError( StandardFaultType ),
+	/* List containers https://docs.docker.com/engine/api/v1.29/#operation/ContainerList */
+	containers( ContainersRequest )( ContainersResponse )
+		throws BadParam( StandardFaultType ) ServerError( StandardFaultType ),
 
-		/* Create a container https://docs.docker.com/engine/api/v1.29/#operation/ContainerCreate */
-    createContainer( CreateContainerRequest )( CreateContainerResponse )
-			throws BadParam( StandardFaultType ) ServerError( StandardFaultType ) NoSuchContainer( StandardFaultType ) NoAttachment( StandardFaultType ) Conflict( StandardFaultType ),
+	/* Create a container https://docs.docker.com/engine/api/v1.29/#operation/ContainerCreate */
+	createContainer( CreateContainerRequest )( CreateContainerResponse )
+		throws BadParam( StandardFaultType ) ServerError( StandardFaultType ) NoSuchContainer( StandardFaultType ) NoAttachment( StandardFaultType ) Conflict( StandardFaultType ),
 
-		/* Create an exec instance https://docs.docker.com/engine/api/v1.29/#operation/ContainerExec */
-		createExec( CreateExecRequest )( CreateExecResponse )
-			throws NoSuchContainer( StandardFaultType ) ServerError( StandardFaultType ) ContainerPaused( StandardFaultType ),
+	/* Create an exec instance https://docs.docker.com/engine/api/v1.29/#operation/ContainerExec */
+	createExec( CreateExecRequest )( CreateExecResponse )
+		throws NoSuchContainer( StandardFaultType ) ServerError( StandardFaultType ) ContainerPaused( StandardFaultType ),
 
-		/* Create a network https://docs.docker.com/engine/api/v1.29/#operation/NetworkCreate */
-    createNetwork( CreateNetworkRequest )( CreateNetworkResponse )
-			throws PluginNotFound( StandardFaultType ) ServerError( StandardFaultType ) OperationNotSupported( StandardFaultType ),
+	/* Create a network https://docs.docker.com/engine/api/v1.29/#operation/NetworkCreate */
+	createNetwork( CreateNetworkRequest )( CreateNetworkResponse )
+		throws PluginNotFound( StandardFaultType ) ServerError( StandardFaultType ) OperationNotSupported( StandardFaultType ),
 
-		/* Create a volume https://docs.docker.com/engine/api/v1.29/#operation/VolumeCreate */
-		createVolume( CreateVolumeRequest )( CreateVolumeResponse )
-			throws ServerError( StandardFaultType ),
+	/* Create a volume https://docs.docker.com/engine/api/v1.29/#operation/VolumeCreate */
+	createVolume( CreateVolumeRequest )( CreateVolumeResponse )
+		throws ServerError( StandardFaultType ),
 
-		/* delete stopped containers https://docs.docker.com/engine/api/v1.29/#operation/ContainerPrune */
-    deleteStoppedContainers( DeleteStopContainersRequest )( DeleteStopContainersResponse )
-			throws ServerError( StandardFaultType ),
+	/* delete stopped containers https://docs.docker.com/engine/api/v1.29/#operation/ContainerPrune */
+	deleteStoppedContainers( DeleteStopContainersRequest )( DeleteStopContainersResponse )
+		throws ServerError( StandardFaultType ),
 
-		/* export a container https://docs.docker.com/engine/api/v1.29/#operation/ContainerExport */
-    exportContainer( ExportContainerRequest )( undefined )
-			throws NoSuchContainer( StandardFaultType ) ServerError( StandardFaultType ),
+	/* export a container https://docs.docker.com/engine/api/v1.29/#operation/ContainerExport */
+	exportContainer( ExportContainerRequest )( undefined )
+		throws NoSuchContainer( StandardFaultType ) ServerError( StandardFaultType ),
 
-		/* export image https://docs.docker.com/engine/api/v1.29/#operation/ContainerExport */
-    exportImage( ExportImageRequest )( ExportImageResponse )
-			throws ServerError( StandardFaultType ),
+	/* export image https://docs.docker.com/engine/api/v1.29/#operation/ContainerExport */
+	exportImage( ExportImageRequest )( ExportImageResponse )
+		throws ServerError( StandardFaultType ),
 
-		/* List all images https://docs.docker.com/engine/api/v1.29/#operation/ImageList */
-		images( ImagesRequest )( ImagesResponse )
-			throws ServerError( StandardFaultType ) NoRepository( StandardFaultType ),
+	/* List all images https://docs.docker.com/engine/api/v1.29/#operation/ImageList */
+	images( ImagesRequest )( ImagesResponse )
+		throws ServerError( StandardFaultType ) NoRepository( StandardFaultType ),
 
-		/* Create an image https://docs.docker.com/engine/api/v1.29/#operation/ImageCreate */
-		imageCreate( ImageCreateRequest )( ImageCreateResponse )
-			throws NoRepository( StandardFaultType ) ServerError( StandardFaultType ),
+	/* Create an image https://docs.docker.com/engine/api/v1.29/#operation/ImageCreate */
+	imageCreate( ImageCreateRequest )( ImageCreateResponse )
+		throws NoRepository( StandardFaultType ) ServerError( StandardFaultType ),
 
-		/* get the history of the image https://docs.docker.com/engine/api/v1.29/#operation/ImageHistory */
-		imageHistory( ImageHistoryRequest )( ImageHistoryResponse )
-			throws NoImage( StandardFaultType ) ServerError( StandardFaultType ),
+	/* get the history of the image https://docs.docker.com/engine/api/v1.29/#operation/ImageHistory */
+	imageHistory( ImageHistoryRequest )( ImageHistoryResponse )
+		throws NoImage( StandardFaultType ) ServerError( StandardFaultType ),
 
-		/* Search images https://docs.docker.com/engine/api/v1.29/#operation/ImageSearch */
-		imageSearch( ImageSearchRequest )( ImageSearchResponse )
-			throws ServerError( StandardFaultType ),
+	/* Search images https://docs.docker.com/engine/api/v1.29/#operation/ImageSearch */
+	imageSearch( ImageSearchRequest )( ImageSearchResponse )
+		throws ServerError( StandardFaultType ),
 
-		/* Inspect a container https://docs.docker.com/engine/api/v1.29/#operation/ImageInspect*/
-		inspectContainer( InspectContainerRequest )( InspectContainerResponse )
-			throws ServerError( StandardFaultType ) NoSuchContainer( StandardFaultType ),
+	/* Inspect a container https://docs.docker.com/engine/api/v1.29/#operation/ImageInspect*/
+	inspectContainer( InspectContainerRequest )( InspectContainerResponse )
+		throws ServerError( StandardFaultType ) NoSuchContainer( StandardFaultType ),
 
-		/* Inspect an image https://docs.docker.com/engine/api/v1.29/#operation/ImageInspect */
-		inspectImage( InspectImageRequest )( InspectImageResponse )
-			throws ServerError( StandardFaultType ) NoSuchImage( StandardFaultType ),
+	/* Inspect an image https://docs.docker.com/engine/api/v1.29/#operation/ImageInspect */
+	inspectImage( InspectImageRequest )( InspectImageResponse )
+		throws ServerError( StandardFaultType ) NoSuchImage( StandardFaultType ),
 
-		/* inspect a network https://docs.docker.com/engine/api/v1.29/#operation/NetworkInspect */
-		inspectNetwork( InspectNetworkRequest )( InspectNetworkResponse )
-			throws NoSuchNetwork( StandardFaultType ),
+	/* inspect a network https://docs.docker.com/engine/api/v1.29/#operation/NetworkInspect */
+	inspectNetwork( InspectNetworkRequest )( InspectNetworkResponse )
+		throws NoSuchNetwork( StandardFaultType ),
 
-		/* inspect a volume https://docs.docker.com/engine/api/v1.29/#operation/VolumeInspect */
-		inspectVolume( InspectVolumeRequest )( InspectVolumeResponse )
-			throws ServerError( StandardFaultType ) NoSuchVolume( StandardFaultType ),
+	/* inspect a volume https://docs.docker.com/engine/api/v1.29/#operation/VolumeInspect */
+	inspectVolume( InspectVolumeRequest )( InspectVolumeResponse )
+		throws ServerError( StandardFaultType ) NoSuchVolume( StandardFaultType ),
 
-		/* Kill a container https://docs.docker.com/engine/api/v1.29/#operation/ContainerKill */
-		killContainer( KillContainerRequest )( KillContainerResponse )
-			throws NoSuchContainer( StandardFaultType ) ServerError( StandardFaultType ),
+	/* Kill a container https://docs.docker.com/engine/api/v1.29/#operation/ContainerKill */
+	killContainer( KillContainerRequest )( KillContainerResponse )
+		throws NoSuchContainer( StandardFaultType ) ServerError( StandardFaultType ),
 
-		/* List processes inside a container https://docs.docker.com/engine/api/v1.29/#operation/ContainerTop */
-		listRunProcesses( ListRunProcessesRequest )( ListRunProcessesResponse )
-			throws NoSuchContainer( StandardFaultType ) ServerError( StandardFaultType ),
+	/* List processes inside a container https://docs.docker.com/engine/api/v1.29/#operation/ContainerTop */
+	listRunProcesses( ListRunProcessesRequest )( ListRunProcessesResponse )
+		throws NoSuchContainer( StandardFaultType ) ServerError( StandardFaultType ),
 
-		/* Get container logs https://docs.docker.com/engine/api/v1.29/#operation/ContainerLogs */
-		logs( LogsRequest )( LogsResponse ),
+	/* Get container logs https://docs.docker.com/engine/api/v1.29/#operation/ContainerLogs */
+	logs( LogsRequest )( LogsResponse ),
 
-		/* List netowrks https://docs.docker.com/engine/api/v1.29/#operation/NetworkList */
-		networks( NetworksRequest )( NetworksResponse )
-			throws ServerError( StandardFaultType ),
+	/* List netowrks https://docs.docker.com/engine/api/v1.29/#operation/NetworkList */
+	networks( NetworksRequest )( NetworksResponse )
+		throws ServerError( StandardFaultType ),
 
-		/* Pause a container https://docs.docker.com/engine/api/v1.29/#operation/ContainerPaused */
-		pauseContainer( PauseContainerRequest )( PauseContainerResponse )
-			throws NoSuchContainer( StandardFaultType ) ServerError( StandardFaultType ),
+	/* Pause a container https://docs.docker.com/engine/api/v1.29/#operation/ContainerPaused */
+	pauseContainer( PauseContainerRequest )( PauseContainerResponse )
+		throws NoSuchContainer( StandardFaultType ) ServerError( StandardFaultType ),
 
-		/* Remove a container https://docs.docker.com/engine/api/v1.29/#operation/ContainerDelete */
-		removeContainer( RemoveContainerRequest )( RemoveContainerResponse )
-			throws NoSuchContainer( StandardFaultType ) ServerError( StandardFaultType ) BadParam( StandardFaultType ),
+	/* Remove a container https://docs.docker.com/engine/api/v1.29/#operation/ContainerDelete */
+	removeContainer( RemoveContainerRequest )( RemoveContainerResponse )
+		throws NoSuchContainer( StandardFaultType ) ServerError( StandardFaultType ) BadParam( StandardFaultType ),
 
-		/* 	Remove an image https://docs.docker.com/engine/api/v1.29/#operation/ImageDelete */
-		removeImage( RemoveImageRequest )( RemoveImageResponse )
-			throws NoSuchImage( StandardFaultType ) ServerError( StandardFaultType ) Conflict( StandardFaultType ),
+	/* 	Remove an image https://docs.docker.com/engine/api/v1.29/#operation/ImageDelete */
+	removeImage( RemoveImageRequest )( RemoveImageResponse )
+		throws NoSuchImage( StandardFaultType ) ServerError( StandardFaultType ) Conflict( StandardFaultType ),
 
-		/* Remove a network https://docs.docker.com/engine/api/v1.29/#operation/NetworkDelete */
-		removeNetwork( RemoveNetworkRequest )( RemoveNetworkResponse )
-			throws Conflict( StandardFaultType ) ServerError( StandardFaultType ),
+	/* Remove a network https://docs.docker.com/engine/api/v1.29/#operation/NetworkDelete */
+	removeNetwork( RemoveNetworkRequest )( RemoveNetworkResponse )
+		throws Conflict( StandardFaultType ) ServerError( StandardFaultType ),
 
-		/* Remove a volume https://docs.docker.com/engine/api/v1.29/#operation/VolumeDelete */
-		removeVolume( RemoveVolumeRequest )( RemoveVolumeResponse )
-			throws NoSuchVolume( StandardFaultType ) VolumeInUse( StandardFaultType ) ServerError( StandardFaultType ),
+	/* Remove a volume https://docs.docker.com/engine/api/v1.29/#operation/VolumeDelete */
+	removeVolume( RemoveVolumeRequest )( RemoveVolumeResponse )
+		throws NoSuchVolume( StandardFaultType ) VolumeInUse( StandardFaultType ) ServerError( StandardFaultType ),
 
-		/* Rename a container https://docs.docker.com/engine/api/v1.29/#operation/ContainerRename */
-		renameContainer( RenameContainerRequest )( RenameContainerResponse )
-			throws NoSuchContainer( StandardFaultType ) ServerError( StandardFaultType ) ContainerInUse( StandardFaultType ),
+	/* Rename a container https://docs.docker.com/engine/api/v1.29/#operation/ContainerRename */
+	renameContainer( RenameContainerRequest )( RenameContainerResponse )
+		throws NoSuchContainer( StandardFaultType ) ServerError( StandardFaultType ) ContainerInUse( StandardFaultType ),
 
-		/* Restart a container https://docs.docker.com/engine/api/v1.29/#operation/ContainerRestart */
-		restartContainer( RestartContainerRequest )( RestartContainerResponse )
-			throws NoSuchContainer( StandardFaultType ) ServerError( StandardFaultType ),
+	/* Restart a container https://docs.docker.com/engine/api/v1.29/#operation/ContainerRestart */
+	restartContainer( RestartContainerRequest )( RestartContainerResponse )
+		throws NoSuchContainer( StandardFaultType ) ServerError( StandardFaultType ),
 
-		/* Start a container https://docs.docker.com/engine/api/v1.29/#operation/ContainerRestart*/
-		startContainer( StartContainerRequest )( StartContainerResponse )
-			throws NoSuchContainer( StandardFaultType ) ServerError( StandardFaultType ) AlreadyStarted( StandardFaultType ),
+	/* Start a container https://docs.docker.com/engine/api/v1.29/#operation/ContainerRestart*/
+	startContainer( StartContainerRequest )( StartContainerResponse )
+		throws NoSuchContainer( StandardFaultType ) ServerError( StandardFaultType ) AlreadyStarted( StandardFaultType ),
 
-		/* container stats based on resource usage https://docs.docker.com/engine/api/v1.29/#operation/ContainerStats */
-		statsContainer( StatsContainerRequest )( StatsContainerResponse )
-			throws NoSuchContainer( StandardFaultType ) ServerError( StandardFaultType ),
+	/* container stats based on resource usage https://docs.docker.com/engine/api/v1.29/#operation/ContainerStats */
+	statsContainer( StatsContainerRequest )( StatsContainerResponse )
+		throws NoSuchContainer( StandardFaultType ) ServerError( StandardFaultType ),
 
-		/* stop a container https://docs.docker.com/engine/api/v1.29/#operation/ContainerStop */
-		stopContainer( StopContainerRequest )( StopContainerResponse )
-			throws NoSuchContainer( StandardFaultType ) ServerError( StandardFaultType ) AlreadyStopped( StandardFaultType ),
+	/* stop a container https://docs.docker.com/engine/api/v1.29/#operation/ContainerStop */
+	stopContainer( StopContainerRequest )( StopContainerResponse )
+		throws NoSuchContainer( StandardFaultType ) ServerError( StandardFaultType ) AlreadyStopped( StandardFaultType ),
 
-		/* Unpause a container https://docs.docker.com/engine/api/v1.29/#operation/ContainerUnpause */
-		unpauseContainer( UnpauseContainerRequest )( UnpauseContainerResponse )
-			throws NoSuchContainer( StandardFaultType ) ServerError( StandardFaultType ),
+	/* Unpause a container https://docs.docker.com/engine/api/v1.29/#operation/ContainerUnpause */
+	unpauseContainer( UnpauseContainerRequest )( UnpauseContainerResponse )
+		throws NoSuchContainer( StandardFaultType ) ServerError( StandardFaultType ),
 
-		/* List volumes https://docs.docker.com/engine/api/v1.29/#operation/VolumeList */
-		volumes( VolumesRequest )( VolumesResponse )
-			throws ServerError( StandardFaultType ),
+	/* List volumes https://docs.docker.com/engine/api/v1.29/#operation/VolumeList */
+	volumes( VolumesRequest )( VolumesResponse )
+		throws ServerError( StandardFaultType ),
 
-		/* Wait for a container https://docs.docker.com/engine/api/v1.29/#operation/ContainerWait */
-		waitContainer( WaitContainerRequest )( WaitContainerResponse )
-			throws NoSuchContainer( StandardFaultType ) ServerError( StandardFaultType )
+	/* Wait for a container https://docs.docker.com/engine/api/v1.29/#operation/ContainerWait */
+	waitContainer( WaitContainerRequest )( WaitContainerResponse )
+		throws NoSuchContainer( StandardFaultType ) ServerError( StandardFaultType )
 }

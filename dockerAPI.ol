@@ -32,8 +32,8 @@ inputPort DockerIn {
 outputPort DockerD {
   Protocol: http {
 		.responseHeaders="@header";
-		.debug=1;
-		.debug.showContent=1;
+		.debug=0;
+		.debug.showContent=0;
 		.format->format;
 		.contentType->contentType;
 		.statusCode->statusCode;
@@ -77,6 +77,7 @@ outputPort DockerD {
 		.osc.imageCreate.alias = "images/create?fromImage=%!{fromImage}&fromSrc=%!{fromSrc}&repo=%!{repo}&tag=%!{tag}";
 		.osc.imageCreate.method = "post";
 		.osc.imageCreate.method.queryFormat = "json";
+		.osc.imageCreate.forceContentDecoding = "string";
 
 		.osc.imageHistory.alias = "images/%!{name}/history";
 		.osc.imageHistory.method = "get";
