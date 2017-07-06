@@ -374,8 +374,8 @@ main {
 			else if( responseByDocker.("@header").statusCode == 404 )
 			{
 					fault.status = 404;
-					fault.message = "No such a container";
-					throw( NoSuchContainer, fault )
+					fault.message = "No such image";
+					throw( NoSuchImage, fault )
 			}
 			else if( responseByDocker.("@header").statusCode == 406 )
 			{

@@ -890,7 +890,7 @@ interface InterfaceAPI {
 
 	/* Create a container https://docs.docker.com/engine/api/v1.29/#operation/ContainerCreate */
 	createContainer( CreateContainerRequest )( CreateContainerResponse )
-		throws BadParam( StandardFaultType ) ServerError( StandardFaultType ) NoSuchContainer( StandardFaultType ) NoAttachment( StandardFaultType ) Conflict( StandardFaultType ),
+		throws BadParam( StandardFaultType ) ServerError( StandardFaultType ) NoSuchImage( StandardFaultType ) NoAttachment( StandardFaultType ) Conflict( StandardFaultType ),
 
 	/* Create an exec instance https://docs.docker.com/engine/api/v1.29/#operation/ContainerExec */
 	createExec( CreateExecRequest )( CreateExecResponse )
