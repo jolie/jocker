@@ -32,8 +32,8 @@ inputPort DockerIn {
 outputPort DockerD {
   Protocol: http {
 		.responseHeaders="@header";
-		.debug=0;
-		.debug.showContent=0;
+		.debug = true;
+		.debug.showContent=true;
 		.format->format;
 		.contentType->contentType;
 		.statusCode->statusCode;
@@ -303,11 +303,17 @@ main {
 	[ containers( request )( response ) {
 		scope( containers )
 		{
-			if( !(is_defined( request.all ))){
-					request.all = false
-			};
-			if( !(is_defined( request.size ))){
-					request.size = false
+			/*if( !( is_defined( request.all ) ) ) { request.all = false };
+			if( !( is_defined( request.size ) ) ) { request.size = false };*/
+			if ( is_defined( request.filters ) ) {
+				  foreach( f : request.filters ) {
+							filt.( f )._ = request.filters.( f )
+					};
+					json_transf << filt;
+					getJsonString@JsonUtils( json_transf )( filtersJson );
+					println@Console( filtersJson )();
+					undef( request.filters );
+					request.filters = filtersJson
 			};
 			containers@DockerD( request )( responseByDocker );
 			if( responseByDocker.("@header").statusCode == 400 )
@@ -357,6 +363,11 @@ main {
 			};
 			if( !(is_defined( request.StopTimeout ))){
 					request.StopTimeout = 10
+			};
+			if ( is_defined( request.Env ) && #request.Env == 1 ) {
+					env = request.Env;
+					undef( request.Env );
+					request.Env._ = env
 			};
 			createContainer@DockerD( request )( responseByDocker );
 			if( responseByDocker.("@header").statusCode == 400 )
