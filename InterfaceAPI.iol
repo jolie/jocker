@@ -277,7 +277,7 @@ type ContainersRequest: void {
 	.all?: bool          //< Show all containers. Only running containers are shown by default
 	.limit?: int        //< Show limit last created containers, include non-running ones.
 	.size?: bool        //< Show the containers sizes
-	.filters?: string {
+	.filters?: void {
 		.exited?: int
 		.status?: string
 		.label?: undefined
@@ -891,7 +891,7 @@ interface InterfaceAPI {
 
 	/* Create a container https://docs.docker.com/engine/api/v1.29/#operation/ContainerCreate */
 	createContainer( CreateContainerRequest )( CreateContainerResponse )
-		throws BadParam( StandardFaultType ) ServerError( StandardFaultType ) NoSuchContainer( StandardFaultType ) NoAttachment( StandardFaultType ) Conflict( StandardFaultType ),
+		throws BadParam( StandardFaultType ) ServerError( StandardFaultType ) NoSuchImage( StandardFaultType ) NoAttachment( StandardFaultType ) Conflict( StandardFaultType ),
 
 	/* Create an exec instance https://docs.docker.com/engine/api/v1.29/#operation/ContainerExec */
 	createExec( CreateExecRequest )( CreateExecResponse )
