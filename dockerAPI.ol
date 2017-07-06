@@ -41,6 +41,7 @@ outputPort DockerD {
 		.osc.build.alias = "build?q=%!{q}&nocache=%!{nocache}&rm=%!{rm}&forcerm=%!{forcerm}&t=%!{t}&dockerfile=%!{dockerfile}";
 		.osc.build.method = "post";
 		.osc.build.method.queryFormat = "json";
+		.osc.build.forceContentDecoding = "string";
 
 		.osc.changesOnCtn.alias = "containers/%!{id}/changes";
 		.osc.changesOnCtn.method = "get";
