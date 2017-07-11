@@ -140,7 +140,7 @@ main {
 	mkdir@File( freshname )();
 	copyDir@File( { .to=freshname, .from="ServiceToTest" } )();
 	file.filename = freshname + "/Dockerfile";
-	file.content = "FROM jolielang/jolie-docker-deployer\n
+	file.content = "FROM jolielang/jolie-deployer\n
 	EXPOSE 8000\n
 	COPY " + freshname + "/main.ol main.ol\n
 	COPY " + freshname + "/ServiceInterface.iol ServiceInterface.iol\n
