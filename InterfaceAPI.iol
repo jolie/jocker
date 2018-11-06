@@ -160,6 +160,7 @@ type Networks: void {
 	.Networks?: void {
     .bridge?: Bridge
     .host?: Host
+		.none?: undefined
   }
 }
 
@@ -181,8 +182,8 @@ type NetworkSettings: void {
 	.IPv6Gateway?: string
 	.MacAddress?: string
 	.Networks?: void {
-      .bridge?: Bridge
-			.none?: undefined
+		.bridge?: Bridge
+		.none?: undefined
   }
 	.Ports?: undefined
 }
