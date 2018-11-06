@@ -181,6 +181,7 @@ type NetworkSettings: void {
 	.MacAddress?: string
 	.Networks?: void {
       .bridge?: Bridge
+			.none?: undefined
   }
 	.Ports?: undefined
 }
