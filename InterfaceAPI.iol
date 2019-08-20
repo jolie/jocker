@@ -34,6 +34,7 @@ type Bridge: void {
 	.MacAddress?: string
 	.IPAMConfig?: undefined
 	.NetworkID?: string
+	.DriverOpts?: string
 }
 
 type Config: void {
