@@ -65,7 +65,7 @@ type Config: void {
 }
 
 type Host: void {
-  .GlobalIPv6Address: string
+  	.GlobalIPv6Address: string
 	.IPPrefixLen: int
 	.GlobalIPv6PrefixLen: int
 	.Aliases: void | string
@@ -77,6 +77,7 @@ type Host: void {
 	.Links*: void | string
 	.IPv6Gateway: string
 	.IPAddress: string
+	.DriverOpts?: any
 }
 
 type HostConfig: void {
@@ -161,7 +162,7 @@ type Networks: void {
 	.Networks?: void {
     .bridge?: Bridge
     .host?: Host
-		.none?: undefined
+	.none?: undefined
   }
 }
 
