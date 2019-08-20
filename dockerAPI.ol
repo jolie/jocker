@@ -32,8 +32,8 @@ inputPort DockerIn {
 outputPort DockerD {
   Protocol: http {
 		.responseHeaders="@header";
-		.debug = true;
-		.debug.showContent=true;
+		.debug = false;
+		.debug.showContent=false;
 		.format->format;
 		.contentType->contentType;
 		.statusCode->statusCode;
@@ -270,7 +270,7 @@ main {
 			else
 			{
 					undef( responseByDocker.("@header") );
-					response.message << responseByDocker
+					response.message -> responseByDocker
 			}
 		}
 	}]
@@ -295,7 +295,7 @@ main {
 			else
 			{
 					undef( responseByDocker.("@header") );
-					response.changes<<responseByDocker._
+					response.changes -> responseByDocker._
 			}
 		}
 	}]
@@ -332,7 +332,7 @@ main {
 			else
 			{
 				undef( responseByDocker.("@header") );
-				response.container<<responseByDocker._
+				response.container -> responseByDocker._
 			}
 		}
 	}]
@@ -404,7 +404,7 @@ main {
 			else
 			{
 					undef( responseByDocker.("@header") );
-			    response<<responseByDocker
+			    response -> responseByDocker
 			}
 		}
   }]
@@ -429,7 +429,7 @@ main {
 					fault.message = "Server Error";
 					throw( ServerError, fault )
 			};
-			response << responseByDocker
+			response -> responseByDocker
 	}]
 
 
@@ -461,7 +461,7 @@ main {
 				else
 				{
 						undef( responseByDocker.("@header") );
-						response<<responseByDocker
+						response -> responseByDocker
 				}
 		}
 	}]
@@ -480,7 +480,7 @@ main {
 				else
 				{
 						undef( responseByDocker.("@header") );
-						response<<responseByDocker
+						response -> responseByDocker
 				}
 		}
 	}]
@@ -499,7 +499,7 @@ main {
 				else
 				{
 						undef( responseByDocker.("@header") );
-						response<<responseByDocker
+						response -> responseByDocker
 				}
 		}
 	}]
@@ -523,7 +523,7 @@ main {
 			else
 			{
 				undef( responseByDocker.("@header") );
-				response << responseByDocker
+				response -> responseByDocker
 			}
 		}
   }]
@@ -542,7 +542,7 @@ main {
 					else
 					{
 							undef( responseByDocker.("@header") );
-							response << responseByDocker
+							response -> responseByDocker
 					}
 			}
   }]
@@ -565,7 +565,7 @@ main {
 							throw( ServerError, fault )
 					} else {
 							undef( responseByDocker.("@header") );
-							response.images<<responseByDocker._
+							response.images -> responseByDocker._
 					}
 			}
   }]
@@ -621,7 +621,7 @@ main {
 					else
 					{
 							undef( responseByDocker.("@header") );
-							response.results<<responseByDocker._
+							response.results -> responseByDocker._
 					}
 			}
   }]
@@ -646,7 +646,7 @@ main {
 					else
 					{
 							undef( responseByDocker.("@header") );
-					    response<<responseByDocker
+					    response -> responseByDocker
 					}
 			}
   }]
@@ -671,7 +671,7 @@ main {
 					else
 					{
 						undef( responseByDocker.("@header") );
-						response<<responseByDocker
+						response -> responseByDocker
 					}
 			}
   }]
@@ -691,7 +691,7 @@ main {
 			else
 			{
 					undef( responseByDocker.("@header") );
-					response.result<<responseByDocker
+					response.result -> responseByDocker
 			}
 		}
   }]
@@ -714,7 +714,7 @@ main {
 		else
 		{
 			undef( responseByDocker.("@header") );
-			response.result<<responseByDocker
+			response.result -> responseByDocker
 		}
   }]
 
@@ -741,7 +741,7 @@ main {
 			else
 			{
 				undef( responseByDocker.("@header") );
-				response.result<<responseByDocker
+				response.result -> responseByDocker
 			}
 		}
 	}]
@@ -769,8 +769,8 @@ main {
 			else
 			{
 				undef( responseByDocker.("@header") );
-				response.Titles << responseByDocker.Titles;
-		    response.Processes.row << responseByDocker.Processes._
+				response.Titles -> responseByDocker.Titles;
+		    	response.Processes.row -> responseByDocker.Processes._
 			}
 		}
   }]
@@ -812,7 +812,7 @@ main {
 					else
 					{
 							undef( responseByDocker.("@header") );
-							response.log<<responseByDocker
+							response.log -> responseByDocker
 					}
 			}
   }]
@@ -832,7 +832,7 @@ main {
 					else
 					{
 							undef( responseByDocker.("@header") );
-							response.network<<responseByDocker._
+							response.network -> responseByDocker._
 					}
 			}
   }]
@@ -856,7 +856,7 @@ main {
 			else
 			{
 					undef( responseByDocker.("@header") );
-					response << responseByDocker
+					response -> responseByDocker
 			}
 		}
 	}]
@@ -887,7 +887,7 @@ main {
 			else
 			{
 				undef( responseByDocker.("@header") );
-				response << responseByDocker
+				response -> responseByDocker
 			}
 		}
 	}]
@@ -924,7 +924,7 @@ main {
 			else
 			{
 				undef( responseByDocker.("@header") );
-				response.info << responseByDocker._
+				response.info -> responseByDocker._
 			}
 		}
   }]
@@ -949,7 +949,7 @@ main {
 			else
 			{
 					undef( responseByDocker.("@header") );
-					response << responseByDocker
+					response -> responseByDocker
 			}
 		}
 	}]
@@ -986,7 +986,7 @@ main {
 			else
 			{
 					undef( responseByDocker.("@header") );
-					response << responseByDocker
+					response -> responseByDocker
 			}
 		}
 	}]
@@ -1020,7 +1020,7 @@ main {
 			else
 			{
 					undef( responseByDocker.("@header") );
-					response << responseByDocker
+					response -> responseByDocker
 			}
 		}
   }]
@@ -1045,7 +1045,7 @@ main {
 			else
 			{
 				undef( responseByDocker.("@header") );
-				response << responseByDocker
+				response -> responseByDocker
 			}
 		}
 	}]
@@ -1076,7 +1076,7 @@ main {
 			else
 			{
 					undef( responseByDocker.("@header") );
-					response << responseByDocker
+					response -> responseByDocker
 			}
 		}
   }]
@@ -1102,7 +1102,7 @@ main {
 			else
 			{
 				undef( responseByDocker.("@header") );
-				response << responseByDocker
+				response -> responseByDocker
 			}
 		}
   }]
@@ -1130,7 +1130,7 @@ main {
 			else
 			{
 				undef( responseByDocker.("@header") );
-				response<<responseByDocker
+				response -> responseByDocker
 			}
 		}
   }]
@@ -1153,7 +1153,7 @@ main {
 			else
 			{
 					undef( responseByDocker.("@header") );
-					response << responseByDocker
+					response -> responseByDocker
 			}
 		}
 	}]
@@ -1173,7 +1173,7 @@ main {
 			else
 			{
 				undef( responseByDocker.("@header") );
-				response << responseByDocker
+				response -> responseByDocker
 			}
 		}
   }]
@@ -1197,7 +1197,7 @@ main {
 			else
 			{
 				undef( responseByDocker.("@header") );
-				response << responseByDocker
+				response -> responseByDocker
 			}
 		}
   }]
