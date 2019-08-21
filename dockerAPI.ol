@@ -654,7 +654,7 @@ main {
   [ inspectContainer( request )( response ) {
 			scope( inspect )
 			{
-					inspect@DockerD( request )( responseByDocker );
+					inspectContainer@DockerD( request )( responseByDocker );
 					if( responseByDocker.("@header").statusCode == 500 )
 					{
 							fault.status = 500;
