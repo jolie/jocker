@@ -16,6 +16,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+type AttachContainerToNetworkRequest: void {
+	.id: string // network Id
+	.Container: string // container id
+}
+
+type AttachContainerToNetworkResponse: void
+
 type StandardFaultType: void {
 		.status: int
 		.message: string
@@ -344,17 +351,7 @@ type CreateContainerRequest: void {
 	.StopTimeout?: int
 	.HostConfig?: HostConfig
 	.NetworkingConfig?: void {
-		.EndpointsConfig?: void {
-			.isolated_nw?: void {
-				.IPAMConfig?: void {
-						.IPv4Address?: string
-						.IPv6Address?: string
-						.LinkLocalIPs[0, *]: string
-				}
-				.Links[0, *]: string
-				.Aliases[0, *]: string
-			}
-		}
+		.EndpointsConfig?: undefined
 	}
 }
 
@@ -881,6 +878,10 @@ type WaitContainerResponse: void {
 
 interface InterfaceAPI {
   RequestResponse:
+    /* attach a container to a network */
+	attachContainerToNetwork( AttachContainerToNetworkRequest )( AttachContainerToNetworkResponse )
+		throws BadParam( StandardFaultType ) ServerError( StandardFaultType ),
+
 	/* build an image starting from a file https://docs.docker.com/engine/api/v1.29/#operation/ImageBuild */
 	build( BuildRequest )( BuildResponse )
 		throws BadParam( StandardFaultType ) ServerError( StandardFaultType ),

@@ -55,7 +55,7 @@ outputPort DockerD {
 		.osc.createContainer.method = "post";
 		.osc.createContainer.method.queryFormat = "json";
 
-		.osc.createExec.alias = "containers/%!{id}/exec";
+		.osc.createExec.alias = "containers//exec";
 		.osc.createExec.method = "post";
 		.osc.createExec.method.queryFormat = "json";
 
@@ -144,6 +144,10 @@ outputPort DockerD {
 		.osc.removeNetwork.method = "delete";
 		.osc.removeNetwork.method.queryFormat = "json";
 
+		.osc.attachContainerToNetwork.alias = "networks/%!{id}/connect";
+		.osc.attachContainerToNetwork.method = "post";
+		.osc.attachContainerToNetwork.method.queryFormat = "json";
+
 		.osc.removeVolume.alias = "volumes/%!{name}?force=%!{force}";
 		.osc.removeVolume.method = "delete";
 		.osc.removeVolume.method.queryFormat = "json";
@@ -181,6 +185,7 @@ outputPort DockerD {
 		.osc.waitContainer.method.queryFormat = "json"
   }
   RequestResponse:
+  	attachContainerToNetwork,
 	build,
 	changesOnCtn,
 	containers,
@@ -228,6 +233,25 @@ init {
 }
 
 main {
+
+	[ attachContainerToNetwork( request )( response ) {
+		scope( attachContainerToNetwork )
+		{
+			attachContainerToNetwork@DockerD( request )( responseByDocker );
+			if( responseByDocker.("@header").statusCode == 400 )
+			{
+					fault.status = 404;
+					fault.message = "Network or container not found";
+					throw( BadParam, fault )
+			}
+			else if( responseByDocker.("@header").statusCode == 500 )
+			{
+					fault.status = 500;
+					fault.message = "Server Error";
+					throw( ServerError, fault )
+			}
+		}
+	}]
 
 	[ build( request )( response ){
 		scope( build )
