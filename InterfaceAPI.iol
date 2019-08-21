@@ -190,10 +190,7 @@ type NetworkSettings: void {
 	.IPPrefixLen?: int
 	.IPv6Gateway?: string
 	.MacAddress?: string
-	.Networks?: void {
-		.bridge?: Bridge
-		.none?: undefined
-  }
+	.Networks?: undefined
 	.Ports?: undefined
 }
 
