@@ -121,7 +121,7 @@ type HostConfig: void {
 	.Isolation?: string
 	.LxcConf[0, *]: undefined
 	.Memory?: int
-	.MemorySwappiness?: int
+	.MemorySwappiness?: any
 	.MemorySwap?: int
 	.MemoryReservation?: int
 	.KernelMemory?: int
