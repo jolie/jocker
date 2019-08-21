@@ -112,6 +112,7 @@ type HostConfig: void {
 	.CgroupParent?: string
 	.GroupAdd?: undefined
 	.Devices[0, *]: undefined
+	.DeviceCgroupRules?: undefined
 	.DiskQuota?: int
 	.DnsOptions[0, *]: undefined
 	.Dns[0, *]: undefined
@@ -131,9 +132,11 @@ type HostConfig: void {
 	.NanoCpus?: int
 	.PidMode?: string
 	.PortBindings?: undefined
+	.MaskedPaths*: string
 	.Privileged?: bool
 	.PidsLimit?: int
 	.ReadonlyRootfs?: bool
+	.ReadonlyPaths*: string
 	.Runtime?: string
 	.PublishAllPorts?: bool
 	.RestartPolicy?: undefined
@@ -542,6 +545,7 @@ type InspectContainerResponse: void {
 	.ExecIDs?: undefined
 	.SizeRootFs?: int
 	.SizeRw?: int
+	.Platform?: string
 }
 
 
