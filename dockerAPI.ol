@@ -200,7 +200,7 @@ outputPort DockerD {
 	imageCreate,
 	imageHistory,
 	imageSearch,
-	inspect,
+	inspectContainer,
 	inspectImage,
 	inspectNetwork,
 	inspectVolume,
