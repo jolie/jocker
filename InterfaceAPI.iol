@@ -315,7 +315,7 @@ type ContainersResponse: void{
 		.Labels?: undefined
 		.Created?: int
 		.Names[0, *]: string
-		.NetworkSettings?: Networks
+		.NetworkSettings?: undefined
 		.Command?: string
 		.State?: string
 		.ImageID?: string
