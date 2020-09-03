@@ -121,6 +121,7 @@ type HostConfig: void {
 	.VolumesFrom?: undefined
 	.IpcMode?: string
 	.Isolation?: string
+	.KernelMemoryTCP?: undefined
 	.LxcConf[0, *]: undefined
 	.Memory?: int
 	.MemorySwappiness?: any
