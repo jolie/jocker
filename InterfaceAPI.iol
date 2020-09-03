@@ -112,6 +112,7 @@ type HostConfig: void {
 	.CgroupParent?: string
 	.GroupAdd?: undefined
 	.Devices[0, *]: undefined
+	.DeviceRequests?: undefined
 	.DeviceCgroupRules?: undefined
 	.DiskQuota?: int
 	.DnsOptions[0, *]: undefined
