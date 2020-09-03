@@ -97,6 +97,7 @@ type HostConfig: void {
 	.BlkioDeviceReadIOps[0, *]: undefined
 	.BlkioDeviceWriteIOps[0, *]: undefined
 	.Binds?: undefined
+	.Capabilities?: undefined
 	.ContainerIDFile?: string
 	.CpusetCpus?: string
 	.CpusetMems?: string
