@@ -134,7 +134,7 @@ type HostConfig: void {
 	.PortBindings?: undefined
 	.MaskedPaths*: string
 	.Privileged?: bool
-	.PidsLimit?: int
+	.PidsLimit?: undefined
 	.ReadonlyRootfs?: bool
 	.ReadonlyPaths*: string
 	.Runtime?: string
