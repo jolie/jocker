@@ -111,6 +111,7 @@ type HostConfig: void {
 	.CapAdd?: undefined
 	.CapDrop?: undefined
 	.CgroupParent?: string
+	.CgroupnsMode?: string
 	.GroupAdd?: undefined
 	.Devices[0, *]: undefined
 	.DeviceRequests?: undefined
