@@ -129,7 +129,7 @@ type HostConfig: void {
 	.MemorySwap?: int
 	.MemoryReservation?: int
 	.KernelMemory?: int
-	.OomKillDisable?: bool
+	.OomKillDisable?: bool | void
 	.OomScoreAdj?: int
 	.NetworkMode?: string
 	.NanoCpus?: int
