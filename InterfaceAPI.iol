@@ -16,9 +16,29 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+type EndpointSettings: void {
+	.IPAMConfig?: void {
+		.IPv4Address?: string
+		.IPv6Address?: string
+		.LinkLocalIPs*: string	
+	}
+	.Links*: string
+	.Aliases*: string
+	.NetworkID?: string
+	.EndpointID?: string
+	.Gateway?: string
+	.IPAddress?: string 
+	.IPPrefixLen?: int
+	.IPv6Gateway?: string 
+	.GlobalIPv6Address?: string 
+	.GlobalIPv6PrefixLen?: long
+	.MacAddress?: string
+}
+
 type AttachContainerToNetworkRequest: void {
 	.id: string // network Id
 	.Container: string // container id
+	.EndpointConfig?: EndpointSettings
 }
 
 type AttachContainerToNetworkResponse: void
@@ -209,6 +229,7 @@ type NetworkType: void {
 	.Driver?: string
 	.EnableIPv6?: bool
 	.Internal?: bool
+	.Ingress?: bool
 	.Labels?: undefined
 	.Attachable?: bool
 	.IPAM?: void {
@@ -219,9 +240,13 @@ type NetworkType: void {
 		}
 		.Options?: undefined
 	}
+	.ConfigFrom?: undefined
 	.Containers?: undefined
+	.ConfigOnly?: bool
 	.Options?: undefined
 }
+
+
 
 type Port: void {
 	.PrivatePort?: int
@@ -478,11 +503,11 @@ type ImagesResponse: void {
 	.images[0, *]: void {
 		.Id?: string
 		.ParentId?: string
-		.RepoTags[0, *]: string
+		.RepoTags[0, *]: string | void
 		.RepoDigests*: undefined
 		.Created?: int
-		.Size?: int
-		.VirtualSize?: int
+		.Size?: long
+		.VirtualSize?: long
 		.SharedSize?: int
 		.Labels?: undefined
 		.Containers?: int
@@ -642,7 +667,7 @@ type LogsResponse: void {
 }
 
 type NetworksRequest: void {
-	.filters?: string {
+	.filters?: void {
 		.driver?: string
 		.id?: string
 		.label?: undefined

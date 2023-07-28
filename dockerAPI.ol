@@ -185,7 +185,7 @@ outputPort DockerD {
 		.osc.waitContainer.method.queryFormat = "json"
   }
   RequestResponse:
-  	attachContainerToNetwork,
+  	attachContainerToNetwork( AttachContainerToNetworkRequest )( undefined ),
 	build,
 	changesOnCtn,
 	containers,
@@ -846,7 +846,12 @@ main {
 			scope( networks )
 			{
 					install( serverError => println@Console("Internal server error")() );
-					networks@DockerD( request )( responseByDocker );
+					if ( !( request instanceof void ) ) {
+						if ( !( request.filters instanceof void )) {
+							getJsonString@JsonUtils( request.filters )( req.filters )
+						}
+					}
+					networks@DockerD( req )( responseByDocker );
 					if( responseByDocker.("@header").statusCode == 500 )
 					{
 							fault.status = 500;
