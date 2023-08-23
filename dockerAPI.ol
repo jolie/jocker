@@ -851,7 +851,7 @@ main {
 								foreach( f : request.filters ) {
 										value = request.filters.( f )
 										undef( request.filters.( f ) )
-										request.filters.( f ).value = true
+										request.filters.( f ).( value ) = true
 								}
 								getJsonString@JsonUtils( request.filters )( req.filters )
 						}
