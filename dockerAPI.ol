@@ -848,8 +848,14 @@ main {
 					install( serverError => println@Console("Internal server error")() );
 					if ( !( request instanceof void ) ) {
 						if ( !( request.filters instanceof void )) {
-							getJsonString@JsonUtils( request.filters )( req.filters )
+								foreach( f : request.filters ) {
+										value = request.filters.( f )
+										undef( request.filters.( f ) )
+										request.filters.( f ).value = true
+								}
+								getJsonString@JsonUtils( request.filters )( req.filters )
 						}
+
 					}
 					networks@DockerD( req )( responseByDocker );
 					if( responseByDocker.("@header").statusCode == 500 )
