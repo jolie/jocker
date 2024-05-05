@@ -1,11 +1,11 @@
 # Jocker
 The Jolie Docker Orchestrator (work to commence soon).
 
-##Requirements
-In Linux environments it is necessary to install libmathhew libraries in order to enable communication between jocker and Docker on local unix sockets. In ubuntu, it is necessary to:
-- sudo apt get update
-- sudo apt-get install libunixsocket-java
-- cp /usr/lib/jni/libunix-java.so /usr/lib64/libmatthew-java/libunix-java.so
+## Requirements
+In Linux environments it is necessary to install the _libmatthew_ libraries in order to enable communication between jocker and Docker on local unix sockets. In ubuntu, it is necessary to:
+- `sudo apt update`
+- `sudo apt install libunixsocket-java`
+- `cp /usr/lib/jni/libunix-java.so /usr/lib64/libmatthew-java/libunix-java.so`
 
 ## Let's take a look..
 
